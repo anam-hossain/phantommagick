@@ -1,0 +1,39 @@
+{
+    "name": "anam/html2pdf-converter",
+    "description": "A simple php package for converting HTML to pdf using Phantomjs.",
+    "keywords": [
+        "Pdf",
+        "Html to pdf",
+        "Screen capture",
+        "invoice",
+        "Laravel pdf converter"
+    ],
+    "homepage": "https://github.com/anam-hossain/html2pdf-converter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anam hossain",
+            "email": "enam33@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "jakoch/phantomjs-installer": "1.9.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anam\\" : "src/" 
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
+    }
+}
