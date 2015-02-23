@@ -4,9 +4,13 @@
     "keywords": [
         "Pdf",
         "Html to pdf",
+        "Html2pdf",
+        "Html2jpg",
         "Screen capture",
         "invoice",
-        "Laravel pdf converter"
+        "Laravel pdf",
+        "Phantomjs",
+        "Phantom"
     ],
     "homepage": "https://github.com/anam-hossain/html2pdf-converter",
     "license": "MIT",
@@ -19,6 +23,10 @@
     "require": {
         "php": ">=5.4.0",
         "jakoch/phantomjs-installer": "1.9.8"
+    },
+    "require-dev": {
+        "mockery/mockery": "~0.9",
+        "phpunit/phpunit": "~4.4"
     },
     "autoload": {
         "psr-4": {
