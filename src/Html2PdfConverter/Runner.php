@@ -7,11 +7,7 @@ class Runner
 	 * @var string Path to phantomjs binary.
 	 **/
 	protected $binary = 'phantomjs';
-
-	protected $tempFile;
-
-	protected $fileHandler;
-
+	
 	/**
 	 * @var bool If true, all Command output is returned verbatim
 	 **/
@@ -45,30 +41,5 @@ class Runner
 		$json = json_decode($result, $as_array = true);
 		if($json === null) return false;
 		return $json;
-	}
-
-	protected function createTempFile()
-	{
-		$this->tempFile = tempnam(sys_get_temp_dir(), "PDF");
-
-		if (! $this->tempFile) {
-			throw new Exception('Unable to create file in PHP temp directory: '. sys_get_temp_dir());
-		}
-
-		$this->fileHandler = fopen($tempFileName, "w");
-
-		return $this->tempFile;
-	}
-
-
-	protected function append($content)
-	{
-		fwrite($this->fileHandler, $content);
-		fclose($this->fileHandler);
-	}
-
-	protected function removeTempFile()
-	{
-		unlink($this->tempFile);
 	}
 }
