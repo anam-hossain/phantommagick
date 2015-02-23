@@ -52,6 +52,24 @@ class Converter extends Runner
 		return $this;
 	}
 
+	public function download($inline = false)
+	{
+
+	}
+
+	/**
+	 * Save the PDF to given filename.
+	 *
+	 * @param string $filename full physical path with filename
+	 * @return boolean
+	 **/
+
+	public function save($filename)
+	{
+
+		return true;
+	}
+
 	public function pushContent($page)
 	{
 		// file_get_contents will try to load file from physical path or from an URL
