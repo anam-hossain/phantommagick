@@ -2,6 +2,17 @@
 
 include "vendor/autoload.php";
 
+$tmpfname = tempnam(sys_get_temp_dir(), "PDF");
+
+$handle = fopen($tmpfname, "w");
+fwrite($handle, "writing to tempfile");
+//fclose($handle);
+
+// do here something
+var_dump($tmpfname, basename($tmpfname));
+unlink($tmpfname);
+
+die("Exit");
 //echo "Home page";
 
 class Runner {

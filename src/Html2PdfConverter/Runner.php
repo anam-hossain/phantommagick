@@ -1,15 +1,22 @@
 <?php
 namespace Anam\Html2PdfConverter;
 
-class Runner {
+class Runner 
+{
 	/**
-	 * @var string Path to phantomjs binary
+	 * @var string Path to phantomjs binary.
 	 **/
-	private $bin = '/home/vagrant/phantomjs/bin/phantomjs';
+	protected $binary = 'phantomjs';
+
+	protected $tempFile;
+
+	protected $fileHandler;
+
 	/**
 	 * @var bool If true, all Command output is returned verbatim
 	 **/
 	private $debug = true;
+
 	/**
 	 * Constructor
 	 *
@@ -17,12 +24,14 @@ class Runner {
 	 * @param bool Debug mode
 	 * @return void
 	 **/
-	public function __construct($bin = null, $debug = null) {
-		if($bin !== null) $this->bin = $bin;
+	public function __construct($binary = null, $debug = null) 
+	{
+		if($binary !== null) $this->bin = $binary;
 		if($debug !== null) $this->debug = $debug;
 	} // end func: __construct
 	
-	public function execute($script) {
+	public function run($script) 
+	{
 		// Escape
 		$args = func_get_args();
 		$cmd = escapeshellcmd("{$this->bin} " . implode(' ', $args));
@@ -36,5 +45,30 @@ class Runner {
 		$json = json_decode($result, $as_array = true);
 		if($json === null) return false;
 		return $json;
-	} // end func: execute
-} // end class: Runner
+	}
+
+	protected function createTempFile()
+	{
+		$this->tempFile = tempnam(sys_get_temp_dir(), "PDF");
+
+		if (! $this->tempFile) {
+			throw new Exception('Unable to create file in PHP temp directory: '. sys_get_temp_dir());
+		}
+
+		$this->fileHandler = fopen($tempFileName, "w");
+
+		return $this->tempFile;
+	}
+
+
+	protected function append($content)
+	{
+		fwrite($this->fileHandler, $content);
+		fclose($this->fileHandler);
+	}
+
+	protected function removeTempFile()
+	{
+		unlink($this->tempFile);
+	}
+}
