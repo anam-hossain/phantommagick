@@ -1,6 +1,8 @@
 <?php
 namespace Anam\Html2PdfConverter;
 
+use Exception;
+
 class Runner 
 {
 	/**
@@ -16,30 +18,73 @@ class Runner
 	/**
 	 * Constructor
 	 *
-	 * @param string Path to phantomjs binary
 	 * @param bool Debug mode
 	 * @return void
 	 **/
-	public function __construct($binary = null, $debug = null) 
+	public function __construct($debug = null) 
 	{
-		if($binary !== null) $this->bin = $binary;
 		if($debug !== null) $this->debug = $debug;
-	} // end func: __construct
+	}
 	
-	public function run($script) 
+	public function run($script, $source, $output, array $options = array('Portrait', 'A4', 2, '3cm')) 
 	{
-		// Escape
-		$args = func_get_args();
-		$cmd = escapeshellcmd("{$this->bin} " . implode(' ', $args));
-		if($this->debug) $cmd .= ' 2>&1';
+		$this->verifyBinary($this->binary);
+		// foreach ($options as $key => $option) {
+		// 	$options[$key] = escapeshellarg($option);
+		// }
+
+		$command = escapeshellcmd("{$this->binary} {$script} {$source} {$output} " . implode(' ', $options));
+
+		die($command);
+		if($this->debug) $command .= ' 2>&1';
 		// Execute
-		$result = shell_exec($cmd);
-		if($this->debug) return $result;
-		if($result === null) return false;
-		// Return
-		if(substr($result, 0, 1) !== '{') return $result; // not JSON
-		$json = json_decode($result, $as_array = true);
-		if($json === null) return false;
-		return $json;
+		$result = shell_exec($command);
+		
+
+		// Escape
+		// $args = func_get_args();
+		// $cmd = escapeshellcmd("{$this->bin} " . implode(' ', $args));
+		// if($this->debug) $cmd .= ' 2>&1';
+		// // Execute
+		// $result = shell_exec($cmd);
+		// if($this->debug) return $result;
+		// if($result === null) return false;
+		// // Return
+		// if(substr($result, 0, 1) !== '{') return $result; // not JSON
+		// $json = json_decode($result, $as_array = true);
+		// if($json === null) return false;
+		// return $json;
+	}
+
+	public function verifyBinary($binary)
+	{
+        $uname = strtolower(php_uname());
+        if ($this->stringContains($uname, 'darwin')) {
+            if (! shell_exec(escapeshellcmd("which {$binary}"))) {
+                throw new Exception('Binary does not exist');
+            }
+        }
+        elseif ($this->stringContains($uname, 'win')) {
+            if (! shell_exec(escapeshellcmd("where {$binary}"))) {
+                throw new Exception('Binary does not exist');
+            }
+        }
+        elseif ($this->stringContains($uname, 'linux')) {
+            if (! shell_exec(escapeshellcmd("which {$binary}"))) {
+                throw new Exception('Binary does not exist');
+            }
+        }
+        else {
+            throw new \RuntimeException("Unknown operating system.");
+        }
+	}
+
+	public function stringContains($haystack, $needles)
+	{
+		foreach ((array) $needles as $needle) {
+			if ($needle != '' && strpos($haystack, $needle) !== false) return true;
+		}
+
+		return false;
 	}
 }

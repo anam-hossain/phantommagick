@@ -1,6 +1,6 @@
 // Render Multiple URLs to file
 
-var RenderUrlsToFile, arrayOfUrls, system;
+var RenderUrlsToFile, arrayOfUrls, system, output;
 
 system = require("system");
 
@@ -16,7 +16,7 @@ RenderUrlsToFile = function(urls, callbackPerUrl, callbackFinal) {
     webpage = require("webpage");
     page = null;
     getFilename = function() {
-        return "rendermulti-" + urlIndex + ".png";
+        return "rendermulti-" + urlIndex + ".pdf";
     };
     next = function(status, url, file) {
         page.close();
@@ -30,8 +30,8 @@ RenderUrlsToFile = function(urls, callbackPerUrl, callbackFinal) {
             urlIndex++;
             page = webpage.create();
             page.viewportSize = {
-                width: 800,
-                height: 600
+                width: 1280,
+                height: 720
             };
             page.settings.userAgent = "Phantom.js bot";
             return page.open("http://" + url, function(status) {
@@ -57,6 +57,8 @@ arrayOfUrls = null;
 
 if (system.args.length > 1) {
     arrayOfUrls = Array.prototype.slice.call(system.args, 1);
+    //output = arrayOfUrls.pop();
+    console.log(system.args);
 } else {
     console.log("Usage: phantomjs render_multi_url.js [domain.name1, domain.name2, ...]");
     arrayOfUrls = ["www.google.com", "www.bbc.co.uk", "www.phantomjs.org"];

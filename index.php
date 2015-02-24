@@ -2,63 +2,36 @@
 
 include "vendor/autoload.php";
 
-$tmpfname = tempnam(sys_get_temp_dir(), "PDF");
+use Anam\Html2PdfConverter\Converter;
 
-$handle = fopen($tmpfname, "w");
-fwrite($handle, "writing to tempfile");
-//fclose($handle);
+//Converter::make('http://google.com')->toPdf();
+$conv = new Converter();
 
-// do here something
-var_dump($tmpfname, basename($tmpfname));
-unlink($tmpfname);
+$conv->setBinary('/bin/phantomjs');
 
-die("Exit");
-//echo "Home page";
+die("pdf generated");
 
-class Runner {
-	/**
-	 * @var string Path to phantomjs binary
-	 **/
-	private $bin = '/home/vagrant/phantomjs/bin/phantomjs';
-	/**
-	 * @var bool If true, all Command output is returned verbatim
-	 **/
-	private $debug = true;
-	/**
-	 * Constructor
-	 *
-	 * @param string Path to phantomjs binary
-	 * @param bool Debug mode
-	 * @return void
-	 **/
-	public function __construct($bin = null, $debug = null) {
-		if($bin !== null) $this->bin = $bin;
-		if($debug !== null) $this->debug = $debug;
-	} // end func: __construct
-	
-	public function execute($script) {
-		// Escape
-		$args = func_get_args();
-		$cmd = escapeshellcmd("{$this->bin} " . implode(' ', $args));
-		if($this->debug) $cmd .= ' 2>&1';
-		// Execute
-		$result = shell_exec($cmd);
-		if($this->debug) return $result;
-		if($result === null) return false;
-		// Return
-		if(substr($result, 0, 1) !== '{') return $result; // not JSON
-		$json = json_decode($result, $as_array = true);
-		if($json === null) return false;
-		return $json;
-	} // end func: execute
-} // end class: Runner
+// die(sys_get_temp_dir() . uniqid(rand(), true) . '.html');
+//die(dirname(__FILE__));
+$converter = new Converter();
 
+$converter->addPage('/Applications/MAMP/htdocs/html2pdfconverter/site/index-5.html');
+// $converter->addPage('http://zurb.com/ink/downloads/templates/sidebar-hero.html');
+// $converter->addPage('http://zurb.com/ink/downloads/templates/sidebar-hero.html');
 
-$phantomjs = new Runner;
+$path = $converter->save('zyz');
+
+$exec = 'phantomjs /Applications/MAMP/htdocs/html2pdfconverter/src/html2pdfconverter/scripts/rasterize.js ' .  $path . ' /Applications/MAMP/htdocs/html2pdfconverter/image.pdf';
+
+var_dump($path, $exec);
+shell_exec($exec);
+
+//die(var_dump(implode('', $converter->pages)));
+
 //die(dirname(__FILE__));
 //var_dump($phantomjs);
-$file = dirname(__FILE__) . '/examples/rasterize.js';
-var_dump($file);
+//$file = dirname(__FILE__) . '/examples/rasterize.js';
+//var_dump($file);
 // if(file_exists($file)) {
 // 	echo "File exist";
 // 	echo "\<br> $file";
@@ -67,7 +40,7 @@ var_dump($file);
 // 	echo $file;
 // }
 //$result = $phantomjs->execute($file, dirname(__FILE__) . "/hello.html", dirname(__FILE__) . "/hello.pdf");
-shell_exec('/home/vagrant/html2pdfconverter/bin/phantomjs /home/vagrant/html2pdfconverter/src/html2pdfconverter/scripts/rasterize.js "http://code-chunk.com" /home/vagrant/html2pdfconverter/image.pdf');
+//shell_exec('/home/vagrant/html2pdfconverter/bin/phantomjs /home/vagrant/html2pdfconverter/src/html2pdfconverter/scripts/rasterize.js "http://code-chunk.com" /home/vagrant/html2pdfconverter/image.pdf');
 //shell_exec('phantomjs /Applications/MAMP/htdocs/phantomjs/examples/rasterize.js "https://studentvip.com.au" /Applications/MAMP/htdocs/phantomjs/image.pdf');
 
 //echo dirname(__FILE__) . "/hello.html";
