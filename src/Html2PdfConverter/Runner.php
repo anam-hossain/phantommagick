@@ -26,8 +26,10 @@ class Runner
 		if($debug !== null) $this->debug = $debug;
 	}
 	
-	public function run($script, $source, $output, array $options = array('Portrait', 'A4', 2, '3cm')) 
+	public function run($script, $source, $output, array $options = array()) 
 	{
+		$arguments = $this->processArguments($options);
+
 		$this->verifyBinary($this->binary);
 		// foreach ($options as $key => $option) {
 		// 	$options[$key] = escapeshellarg($option);
@@ -54,6 +56,21 @@ class Runner
 		// $json = json_decode($result, $as_array = true);
 		// if($json === null) return false;
 		// return $json;
+	}
+
+	private function processArguments(array $arguments)
+	{
+		foreach ($arguments as $key => $argument) {
+			switch ($key) {
+				case 'value':
+					# code...
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+		}
 	}
 
 	public function verifyBinary($binary)

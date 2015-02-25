@@ -13,7 +13,22 @@ class Converter extends Runner
 
 	public static $scripts = [];
 
-	public $options = [];
+	public $defaultPdfOptions = [
+		//Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'
+		'format' 		=> 'A4',
+		//Orientation: 'portrait', 'landscape'
+		'orientation'	=> 'portrait',
+		// 1 = 100% zoom
+		'zoomfactor'	=> 1,
+		'margin'		=> '1cm',
+		// If paper width and paper height are provided, 
+		// format will be replace with them
+		// Supported dimension units are: 'mm', 'cm', 'in', 'px'. No unit means 'px'.
+		'paperwidth'	=> null,
+		'paperheight'	=> null
+	];
+
+	public $defaultImageOptions = [];
 
 	public function __construct($source = null)
 	{
@@ -27,7 +42,7 @@ class Converter extends Runner
 
 	public function initialize()
 	{
-		self::$scripts['rasterize'] = dirname(__FILE__) . '/scripts/rasterize.js';
+		self::$scripts['converter'] = dirname(__FILE__) . '/scripts/phantom_magick.js';
 	}
 
 	/**
@@ -80,21 +95,30 @@ class Converter extends Runner
 		return new self($source);
 	}
 
-	public function toPdf()
+	public function toPdf(array $options = array())
 	{
-		$this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
+		$options = $this->processOptions($this->defaultPdfOptions, $options);
 
-		$this->run(self::$scripts['rasterize'], $this->getSource(), $this->getTempFilePath());
+        // Custom paper width and height will replace the default format.
+        if($options['paperwidth'] && $options['paperheight']) {
+            // ex. 10cm*5cm, 1200px*1000px, 10in*5in, 900*600
+            // note: without unit (i.e 900*600) will use px.
+            $options['format'] => $options['paperwidth'] . '*' . $options['paperheight'];
+        }
+
+        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
+
+		$this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), $options);
 
 		return $this;
 	}
 
-	public function toPng()
+	public function toPng(array $options = array())
 	{
 
 	}
 
-	public function toJpg()
+	public function toJpg(array $options = array())
 	{
 
 	}
@@ -193,6 +217,17 @@ class Converter extends Runner
 	protected function removeTempFile()
 	{
 		unlink($this->getTempFilePath());
+	}
+
+	protected processOptions(array $defaultOPtions, array $options)
+	{
+        foreach ($options as $key => $option) {
+            if(isset($defaultOPtions[$key])) {
+                $defaultOPtions[$key] = $option;
+            }
+        }
+
+        return $defaultOPtions;
 	}
 }
 
