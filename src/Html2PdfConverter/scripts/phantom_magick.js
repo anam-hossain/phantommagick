@@ -2,10 +2,10 @@ var page = require('webpage').create(),
     system = require('system'),
     orientation = system.args[5] || 'portrait',
     margin = system.args[6] || '1cm',
-    quality = system.args[7] || '65',
+    quality = system.args[7] || '70',
     address, output, size;
 
-if (system.args.length < 3 || system.args.length > 5) {
+if (system.args.length < 3 || system.args.length > 8) {
     console.log('Usage: rasterize.js URL filename [paperwidth*paperheight|paperformat] [zoom] [orientation] [margin] [quality]');
     console.log('  paper (pdf output) examples: "5in*7.5in", "10cm*20cm", "A4", "Letter"');
     console.log('  image (png/jpg output) examples: "1920px" entire page, window width 1920px');

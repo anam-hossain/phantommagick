@@ -16,11 +16,12 @@ class Converter extends Runner
 	public $defaultPdfOptions = [
 		//Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'
 		'format' 		=> 'A4',
-		//Orientation: 'portrait', 'landscape'
-		'orientation'	=> 'portrait',
 		// 1 = 100% zoom
 		'zoomfactor'	=> 1,
+        //Orientation: 'portrait', 'landscape'
+        'orientation'   => 'portrait',
 		'margin'		=> '1cm',
+        'quality'       => '70',
 		// If paper width and paper height are provided, 
 		// format will be replace with them
 		// Supported dimension units are: 'mm', 'cm', 'in', 'px'. No unit means 'px'.
@@ -104,6 +105,8 @@ class Converter extends Runner
             // ex. 10cm*5cm, 1200px*1000px, 10in*5in, 900*600
             // note: without unit (i.e 900*600) will use px.
             $options['format'] => $options['paperwidth'] . '*' . $options['paperheight'];
+
+            unset($options['paperwidth'], $options['paperheight']);
         }
 
         $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
