@@ -9,9 +9,9 @@ class Converter extends Runner
 
 	protected $source;
 
-	public $pages = [];
+	protected $pages = [];
 
-	public static $scripts = [];
+	protected static $scripts = [];
 
 	protected $defaultPdfOptions = [
 		//Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'
@@ -58,7 +58,7 @@ class Converter extends Runner
 		}
 	}
 
-	public function initialize()
+	private function initialize()
 	{
 		self::$scripts['converter'] = dirname(__FILE__) . '/scripts/phantom_magick.js';
 	}
@@ -177,6 +177,7 @@ class Converter extends Runner
 	{
 		if($options['width'] && $options['height']) {
 
+            // Only digits accepted
             if (! ctype_digit($options['width'])) {
 				throw new Exception('Width must be a number');
 			}
@@ -184,7 +185,7 @@ class Converter extends Runner
 			if (! ctype_digit($options['height'])) {
 				throw new Exception('Height must be a number');
 			}
-            // ex. 1200px*1000px
+            // generate dimension - i.e 1200px*1000px
             $options['dimension'] => $options['width'] . 'px' . '*' . $options['height'] . 'px';
         }
 
