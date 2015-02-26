@@ -18,10 +18,10 @@ class Converter extends Runner
 		'format' 		=> 'A4',
 		// 1 = 100% zoom
 		'zoomfactor'	=> 1,
+		'quality'       => '70',
         //Orientation: 'portrait', 'landscape'
         'orientation'   => 'portrait',
 		'margin'		=> '1cm',
-        'quality'       => '70',
 		// If paper width and paper height are provided, 
 		// format will be replace with them
 		// Supported dimension units are: 'mm', 'cm', 'in', 'px'. No unit means 'px'.
@@ -29,7 +29,18 @@ class Converter extends Runner
 		'paperheight'	=> null
 	];
 
-	public $defaultImageOptions = [];
+	public $defaultImageOptions = [
+		// Dimension in pixels, 720p.
+		'dimension' 	=> '1280px*720px',
+		// 1 = 100% zoom
+		'zoomfactor'	=> 1,
+		'quality'       => '70',
+		// If custom width and height is provided, 
+		// Dimension will be set with the custom width and height
+		// i.e width*height
+		'width'	=> null,
+		'height'	=> null
+	];
 
 	public function __construct($source = null)
 	{
@@ -105,9 +116,9 @@ class Converter extends Runner
             // ex. 10cm*5cm, 1200px*1000px, 10in*5in, 900*600
             // note: without unit (i.e 900*600) will use px.
             $options['format'] => $options['paperwidth'] . '*' . $options['paperheight'];
-
-            unset($options['paperwidth'], $options['paperheight']);
         }
+
+        unset($options['paperwidth'], $options['paperheight']);
 
         $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
 
@@ -118,12 +129,40 @@ class Converter extends Runner
 
 	public function toPng(array $options = array())
 	{
+		$options = $this->processOptions($this->defaultImageOptions, $options);
 
+  		$options = $this->setDimension($options);
+
+        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.png');
+
+		$this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), $options);
+
+		return $this;
 	}
 
 	public function toJpg(array $options = array())
 	{
 
+	}
+
+	protected function setDimension(array $options)
+	{
+		if($options['width'] && $options['height']) {
+
+            if (! ctype_digit($options['width'])) {
+				throw new Exception('Width must be a number');
+			}
+
+			if (! ctype_digit($options['height'])) {
+				throw new Exception('Height must be a number');
+			}
+            // ex. 1200px*1000px
+            $options['dimension'] => $options['width'] . 'px' . '*' . $options['height'] . 'px';
+        }
+
+        unset($options['width'], $options['height']);
+
+        return $options;
 	}
 
 	public function addPage($page)

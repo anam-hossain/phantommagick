@@ -1,8 +1,8 @@
 var page = require('webpage').create(),
     system = require('system'),
-    orientation = system.args[5] || 'portrait',
-    margin = system.args[6] || '1cm',
-    quality = system.args[7] || '70',
+    quality = system.args[5] || '70',
+    orientation = system.args[6] || 'portrait',
+    margin = system.args[7] || '1cm',
     address, output, size;
 
 if (system.args.length < 3 || system.args.length > 8) {
