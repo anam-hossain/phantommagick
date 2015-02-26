@@ -13,7 +13,7 @@ class Converter extends Runner
 
 	public static $scripts = [];
 
-	public $defaultPdfOptions = [
+	protected $defaultPdfOptions = [
 		//Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'
 		'format' 		=> 'A4',
 		// 1 = 100% zoom
@@ -29,7 +29,7 @@ class Converter extends Runner
 		'paperheight'	=> null
 	];
 
-	public $defaultImageOptions = [
+	protected $defaultImageOptions = [
 		// Dimension in pixels, 720p.
 		'dimension' 	=> '1280px*720px',
 		// 1 = 100% zoom
@@ -42,6 +42,13 @@ class Converter extends Runner
 		'height'	=> null
 	];
 
+	// Supported image formats
+	protected static $imageFormats = [
+		'png' => '.png',
+		'jpg' => '.jpg',
+		'gif' => '.gif'
+	]; 
+
 	public function __construct($source = null)
 	{
 		$this->initialize();
@@ -51,10 +58,14 @@ class Converter extends Runner
 		}
 	}
 
-
 	public function initialize()
 	{
 		self::$scripts['converter'] = dirname(__FILE__) . '/scripts/phantom_magick.js';
+	}
+
+	public static function make($source)
+	{
+		return new self($source);
 	}
 
 	/**
@@ -102,11 +113,6 @@ class Converter extends Runner
 		return $this->source;
 	}
 
-	public static function make($source)
-	{
-		return new self($source);
-	}
-
 	public function toPdf(array $options = array())
 	{
 		$options = $this->processOptions($this->defaultPdfOptions, $options);
@@ -129,20 +135,42 @@ class Converter extends Runner
 
 	public function toPng(array $options = array())
 	{
-		$options = $this->processOptions($this->defaultImageOptions, $options);
-
-  		$options = $this->setDimension($options);
-
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.png');
-
-		$this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), $options);
-
-		return $this;
+		return $this->convertImage($options, $format = 'png');
 	}
 
 	public function toJpg(array $options = array())
 	{
+		return $this->convertImage($options, $format = 'jpg');
+	}
 
+	public function toGif(array $options = array())
+	{
+		return $this->convertImage($options, $format = 'gif');
+	}
+
+	// Alias of convertImage
+	public function toImage($options, $format = 'png')
+	{
+		return $this->convertImage($options, $format);
+	}
+
+	public function convertImage($options, $format = 'png')
+	{
+		$format = strtolower($format);
+
+		if (! array_key_exists($format, self::$imageFormats)) {
+			throw new Exception("\'{$format}\' file format not Supported.");
+		}
+
+		$options = $this->processOptions($this->defaultImageOptions, $options);
+
+  		$options = $this->setDimension($options);
+
+        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . self::$imageFormats[$format]);
+
+		$this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), $options);
+
+		return $this;
 	}
 
 	protected function setDimension(array $options)
