@@ -28,14 +28,13 @@ class Runner
 	
 	public function run($script, $source, $output, array $options = array()) 
 	{
-		$arguments = $this->processArguments($options);
-
 		$this->verifyBinary($this->binary);
-		// foreach ($options as $key => $option) {
-		// 	$options[$key] = escapeshellarg($option);
-		// }
 
-		$command = escapeshellcmd("{$this->binary} {$script} {$source} {$output} " . implode(' ', $options));
+		$arguments = ['script' => $script, 'source' => $source, 'output' => $output] + $options;
+
+		$arguments = $this->escapeShellArguments($arguments);
+
+		$command = escapeshellcmd("{$this->binary} ") . implode(' ', $arguments);
 
 		die($command);
 		if($this->debug) $command .= ' 2>&1';
@@ -58,19 +57,13 @@ class Runner
 		// return $json;
 	}
 
-	private function processArguments(array $arguments)
+	private function escapeShellArguments(array $arguments)
 	{
 		foreach ($arguments as $key => $argument) {
-			switch ($key) {
-				case 'value':
-					# code...
-					break;
-				
-				default:
-					# code...
-					break;
-			}
+			$arguments[$key] = escapeshellarg($argument);
 		}
+
+		return $arguments;
 	}
 
 	public function verifyBinary($binary)

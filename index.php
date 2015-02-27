@@ -7,7 +7,11 @@ use Anam\Html2PdfConverter\Converter;
 //Converter::make('http://google.com')->toPdf();
 $conv = new Converter();
 
-$conv->setBinary('/bin/phantomjs');
+$conv->setBinary('phantomjs')
+	->source('http://google.com')
+	->toPdf(['width' => '900px', 'height' => '700px'])
+	->save(dirname(__FILE__) . '/image.pdf');
+
 
 die("pdf generated");
 

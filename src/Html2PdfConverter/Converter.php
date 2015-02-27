@@ -9,11 +9,13 @@ class Converter extends Runner
 
 	protected $source;
 
+	private static $format = 'pdf';
+
 	protected $pages = [];
 
 	protected static $scripts = [];
 
-	protected $defaultPdfOptions = [
+	protected static $pdfOptions = [
 		//Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'
 		'format' 		=> 'A4',
 		// 1 = 100% zoom
@@ -21,25 +23,15 @@ class Converter extends Runner
 		'quality'       => '70',
         //Orientation: 'portrait', 'landscape'
         'orientation'   => 'portrait',
-		'margin'		=> '1cm',
-		// If paper width and paper height are provided, 
-		// format will be replace with them
-		// Supported dimension units are: 'mm', 'cm', 'in', 'px'. No unit means 'px'.
-		'paperwidth'	=> null,
-		'paperheight'	=> null
+		'margin'		=> '1cm'
 	];
 
-	protected $defaultImageOptions = [
+	protected static $imageOptions = [
 		// Dimension in pixels, 720p.
 		'dimension' 	=> '1280px*720px',
 		// 1 = 100% zoom
 		'zoomfactor'	=> 1,
-		'quality'       => '70',
-		// If custom width and height is provided, 
-		// Dimension will be set with the custom width and height
-		// i.e width*height
-		'width'	=> null,
-		'height'	=> null
+		'quality'       => '70'
 	];
 
 	// Supported image formats
@@ -79,6 +71,8 @@ class Converter extends Runner
 		$this->verifyBinary($binary);
 
 		$this->binary = $binary;
+
+		return $this;
 	}
 
 	/**
@@ -106,6 +100,8 @@ class Converter extends Runner
 	public function setSource($source)
 	{
 		$this->source = $source;
+
+		return $this;
 	}
 
 	public function getSource()
@@ -113,48 +109,43 @@ class Converter extends Runner
 		return $this->source;
 	}
 
+	// Alias of setSource($source)
+	public function source($source) {
+		return $this->setSource($source);
+	}
+
 	public function toPdf(array $options = array())
 	{
-		$options = $this->processOptions($this->defaultPdfOptions, $options);
-
-        // Custom paper width and height will replace the default format.
-        if($options['paperwidth'] && $options['paperheight']) {
-            // ex. 10cm*5cm, 1200px*1000px, 10in*5in, 900*600
-            // note: without unit (i.e 900*600) will use px.
-            $options['format'] => $options['paperwidth'] . '*' . $options['paperheight'];
-        }
-
-        unset($options['paperwidth'], $options['paperheight']);
+		$this->pdfOptions($options);
 
         $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
-
-		$this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), $options);
 
 		return $this;
 	}
 
 	public function toPng(array $options = array())
 	{
-		return $this->convertImage($options, $format = 'png');
+		return $this->prepareImage($options, $format = 'png');
 	}
 
 	public function toJpg(array $options = array())
 	{
-		return $this->convertImage($options, $format = 'jpg');
+		return $this->prepareImage($options, $format = 'jpg');
 	}
 
 	public function toGif(array $options = array())
 	{
-		return $this->convertImage($options, $format = 'gif');
+		return $this->prepareImage($options, $format = 'gif');
 	}
 
-	// Alias of convertImage
+	// Alias of prepareImage()
 	public function toImage($options, $format = 'png')
 	{
-		return $this->convertImage($options, $format);
+		return $this->prepareImage($options, $format);
+
 	}
 
-	public function convertImage($options, $format = 'png')
+	public function prepareImage($options, $format = 'png')
 	{
 		$format = strtolower($format);
 
@@ -162,38 +153,16 @@ class Converter extends Runner
 			throw new Exception("\'{$format}\' file format not Supported.");
 		}
 
-		$options = $this->processOptions($this->defaultImageOptions, $options);
+		self::$format = $format;
 
-  		$options = $this->setDimension($options);
+		$this->imageOptions($options);
 
         $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . self::$imageFormats[$format]);
-
-		$this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), $options);
 
 		return $this;
 	}
 
-	protected function setDimension(array $options)
-	{
-		if($options['width'] && $options['height']) {
-
-            // Only digits accepted
-            if (! ctype_digit($options['width'])) {
-				throw new Exception('Width must be a number');
-			}
-
-			if (! ctype_digit($options['height'])) {
-				throw new Exception('Height must be a number');
-			}
-            // generate dimension - i.e 1200px*1000px
-            $options['dimension'] => $options['width'] . 'px' . '*' . $options['height'] . 'px';
-        }
-
-        unset($options['width'], $options['height']);
-
-        return $options;
-	}
-
+	
 	public function addPage($page)
 	{
 		if (count($this->pages)) {
@@ -221,7 +190,21 @@ class Converter extends Runner
 
 	public function download($inline = false)
 	{
+		if (count($this->pages)) {
+			$this->put(implode('', $this->pages));
 
+			$filename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
+
+			return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $filename, self::$pdfOptions);
+		}
+		
+		// Sigle page pdf
+        if (self::$format === 'pdf') {
+        	return $this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), self::$pdfOptions);
+        }
+        
+        // Image
+        return $this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), self::$imageOptions);
 	}
 
 	/**
@@ -231,17 +214,26 @@ class Converter extends Runner
 	 * @return boolean
 	 **/
 
-	public function save($filename)
+	public function save($destination)
 	{
-        $this->put(implode('', $this->pages));
+        // Multi pages pdf
+        if (count($this->pages)) {
+        	$this->put(implode('', $this->pages));
+        	return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $destination, self::$pdfOptions);
+        }
 
-		//return true;
+        // Sigle page pdf
+        if (self::$format === 'pdf') {
+        	return $this->run(self::$scripts['converter'], $this->getSource(), $destination, self::$pdfOptions);
+        }
         
-        return $this->getTempFilePath();
+        // Image
+        return $this->run(self::$scripts['converter'], $this->getSource(), $destination, self::$imageOptions);
 	}
 
 	public function pushContent($page)
 	{
+		// @file_get_contents will not throw any exception due to @ symbol
 		// file_get_contents will try to load file from physical path or from an URL
 		// and will return the content as string
 		// If failed, it will return false.
@@ -254,7 +246,6 @@ class Converter extends Runner
 		}
 
 		array_push($this->pages, $content);
-
 	}
 
     public function pageBreak()
@@ -264,9 +255,10 @@ class Converter extends Runner
         array_push($this->pages, $content);
     }
 
+    // Only multipages required to create a html file
 	protected function createTempFile()
 	{
-		$this->setTempFilePath(sys_get_temp_dir() . uniqid(rand(), true) . '.html');
+		$this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
 
 		if (! touch($this->getTempFilePath())) {
 			throw new Exception('Unable to create file in PHP temp directory: '. sys_get_temp_dir());
@@ -290,15 +282,46 @@ class Converter extends Runner
 		unlink($this->getTempFilePath());
 	}
 
-	protected processOptions(array $defaultOPtions, array $options)
+	public function pdfOptions(array $options)
 	{
-        foreach ($options as $key => $option) {
-            if(isset($defaultOPtions[$key])) {
-                $defaultOPtions[$key] = $option;
+		foreach ($options as $key => $option) {
+            if(isset(self::$pdfOptions[$key])) {
+                self::$pdfOptions[$key] = $option;
             }
         }
 
-        return $defaultOPtions;
+        // Custom paper width and height will replace the default format.
+        if(isset($options['width']) && isset($options['height'])) {
+            // ex. 10cm*5cm, 1200px*1000px, 10in*5in, 900*600
+            // note: without unit (i.e 900*600) will use px.
+            self::$pdfOptions['format'] = $options['width'] . '*' . $options['height'];
+        }
+
+		return $this;
+	}
+
+	public function imageOptions(array $options)
+	{
+        foreach ($options as $key => $option) {
+            if(isset(self::$imageOptions[$key])) {
+                self::$imageOptions[$key] = $option;
+            }
+        }
+
+        if(isset($options['width']) && isset($options['height'])) {
+            // Only digits accepted
+            if (! ctype_digit($options['width'])) {
+				throw new Exception('Width must be a number');
+			}
+
+			if (! ctype_digit($options['height'])) {
+				throw new Exception('Height must be a number');
+			}
+            // generate dimension - i.e 1200px*1000px
+            self::$imageOptions['dimension'] = $options['width'] . 'px' . '*' . $options['height'] . 'px';
+        }
+
+        return $this;
 	}
 }
 
