@@ -36,12 +36,12 @@ class Runner
 
 		$command = escapeshellcmd("{$this->binary} ") . implode(' ', $arguments);
 
-		die($command);
+		//die($command);
 		if($this->debug) $command .= ' 2>&1';
 		// Execute
 		$result = shell_exec($command);
 		
-
+		die($result);
 		// Escape
 		// $args = func_get_args();
 		// $cmd = escapeshellcmd("{$this->bin} " . implode(' ', $args));

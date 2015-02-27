@@ -188,23 +188,36 @@ class Converter extends Runner
 		return $this;
 	}
 
-	public function download($inline = false)
+	public function download($downloadAs = null, $inline = false)
 	{
 		if (count($this->pages)) {
-			$this->put(implode('', $this->pages));
-
 			$filename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
+		} else {
+			$filename = $this->getTempFilePath();
+		} 
 
-			return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $filename, self::$pdfOptions);
-		}
+		$result = $this->save($filename);
 		
-		// Sigle page pdf
-        if (self::$format === 'pdf') {
-        	return $this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), self::$pdfOptions);
+		// Error.
+		if (trim($result)) {
+			return $result;
+		}
+
+		$path_parts = pathinfo($filename);
+
+		$contentType = $this->contentType($path_parts['extension']);
+
+		if (file_exists($filename)) {
+            header('Content-Description: File Transfer');
+            header("Content-Type: {$contentType}");
+            header('Content-Disposition: ' . $inline? 'inline' : 'attachment' . '; filename='. $downloadAs? $downloadAs : basename($filename));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filename));
+            readfile($filename);
+            exit;
         }
-        
-        // Image
-        return $this->run(self::$scripts['converter'], $this->getSource(), $this->getTempFilePath(), self::$imageOptions);
 	}
 
 	/**
@@ -285,13 +298,13 @@ class Converter extends Runner
 	public function pdfOptions(array $options)
 	{
 		foreach ($options as $key => $option) {
-            if(isset(self::$pdfOptions[$key])) {
+            if (isset(self::$pdfOptions[$key])) {
                 self::$pdfOptions[$key] = $option;
             }
         }
 
         // Custom paper width and height will replace the default format.
-        if(isset($options['width']) && isset($options['height'])) {
+        if (isset($options['width']) && isset($options['height'])) {
             // ex. 10cm*5cm, 1200px*1000px, 10in*5in, 900*600
             // note: without unit (i.e 900*600) will use px.
             self::$pdfOptions['format'] = $options['width'] . '*' . $options['height'];
@@ -303,12 +316,12 @@ class Converter extends Runner
 	public function imageOptions(array $options)
 	{
         foreach ($options as $key => $option) {
-            if(isset(self::$imageOptions[$key])) {
+            if (isset(self::$imageOptions[$key])) {
                 self::$imageOptions[$key] = $option;
             }
         }
 
-        if(isset($options['width']) && isset($options['height'])) {
+        if (isset($options['width']) && isset($options['height'])) {
             // Only digits accepted
             if (! ctype_digit($options['width'])) {
 				throw new Exception('Width must be a number');
@@ -323,5 +336,38 @@ class Converter extends Runner
 
         return $this;
 	}
+
+    protected function contentType($ext) {
+        switch ($ext) {
+            case 'pdf':
+                return 
+
+            case 'jpg':
+                return 
+
+            case 'png':
+                # code...
+                return
+
+            case 'gif':
+                return
+            
+            default 'pdf':
+                # code...
+                return
+        }
+    }
+
+    public function __destruct()
+    {
+        if (file_exists($this->getTempFilePath())) {
+            $pdfFile = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
+            unlink($this->getTempFilePath());
+
+            if (file_exists($pdfFile) {
+                unlink($pdfFile);
+            }
+        }
+    } 
 }
 
