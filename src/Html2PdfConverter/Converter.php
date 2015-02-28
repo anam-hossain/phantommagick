@@ -191,8 +191,10 @@ class Converter extends Runner
 	public function download($downloadAs = null, $inline = false)
 	{
 		if (count($this->pages)) {
+            $this->put(implode('', $this->pages));
+
 			$filename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
-		} else {
+        } else {
 			$filename = $this->getTempFilePath();
 		} 
 
@@ -205,17 +207,23 @@ class Converter extends Runner
 
 		$path_parts = pathinfo($filename);
 
+		$downloadAs = $downloadAs? $downloadAs : $path_parts['basename'];
+		$contentDisposition = $inline? 'inline' : 'attachment';
 		$contentType = $this->contentType($path_parts['extension']);
 
 		if (file_exists($filename)) {
             header('Content-Description: File Transfer');
             header("Content-Type: {$contentType}");
-            header('Content-Disposition: ' . $inline? 'inline' : 'attachment' . '; filename='. $downloadAs? $downloadAs : basename($filename));
+            header("Content-Disposition: {$contentDisposition}; filename={$downloadAs}");
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
             header('Content-Length: ' . filesize($filename));
             readfile($filename);
+
+            unlink($filename);
+            $this->clearTempFiles();
+            
             exit;
         }
 	}
@@ -232,11 +240,13 @@ class Converter extends Runner
         // Multi pages pdf
         if (count($this->pages)) {
         	$this->put(implode('', $this->pages));
+                 
         	return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $destination, self::$pdfOptions);
         }
 
         // Sigle page pdf
         if (self::$format === 'pdf') {
+
         	return $this->run(self::$scripts['converter'], $this->getSource(), $destination, self::$pdfOptions);
         }
         
@@ -283,9 +293,7 @@ class Converter extends Runner
 
 	protected function put($content)
 	{
-		if (! file_exists($this->getTempFilePath())) {
-			$this->createTempFile();
-		}
+		$this->createTempFile();
 
 		file_put_contents($this->getTempFilePath(), $content, FILE_APPEND);
 	}
@@ -340,34 +348,32 @@ class Converter extends Runner
     protected function contentType($ext) {
         switch ($ext) {
             case 'pdf':
-                return 
+                return 'application/pdf'; 
 
             case 'jpg':
-                return 
+                return 'image/jpeg';
 
             case 'png':
-                # code...
-                return
+                return 'image/png';
 
             case 'gif':
-                return
+                return 'image/gif';
             
-            default 'pdf':
-                # code...
-                return
+            default:
+                return 'application/pdf';
+        }
+    }
+
+    public function clearTempFiles()
+    {
+        if (file_exists($this->getTempFilePath())) {
+            unlink($this->getTempFilePath());
         }
     }
 
     public function __destruct()
     {
-        if (file_exists($this->getTempFilePath())) {
-            $pdfFile = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
-            unlink($this->getTempFilePath());
-
-            if (file_exists($pdfFile) {
-                unlink($pdfFile);
-            }
-        }
-    } 
+        $this->clearTempFiles();
+    }
 }
 

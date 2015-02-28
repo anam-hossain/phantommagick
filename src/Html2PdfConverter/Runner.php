@@ -39,9 +39,9 @@ class Runner
 		//die($command);
 		if($this->debug) $command .= ' 2>&1';
 		// Execute
-		$result = shell_exec($command);
+		return shell_exec($command);
 		
-		die($result);
+		//die($result);
 		// Escape
 		// $args = func_get_args();
 		// $cmd = escapeshellcmd("{$this->bin} " . implode(' ', $args));
