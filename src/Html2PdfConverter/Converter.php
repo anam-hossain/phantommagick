@@ -13,6 +13,8 @@ class Converter extends Runner
 
     protected $pages = [];
 
+    protected static $multiPage = false;
+
     protected static $scripts = [];
 
     protected static $pdfOptions = [
@@ -165,6 +167,8 @@ class Converter extends Runner
 
     public function addPage($page)
     {
+        self::$multiPage = true;
+
         if (count($this->pages)) {
             $this->pageBreak();
         }
@@ -177,6 +181,8 @@ class Converter extends Runner
 
     public function addPages(array $pages)
     {
+        self::$multiPage = true;
+
         foreach ($pages as $page) {
             if (count($this->pages)) {
                 $this->pageBreak();
@@ -190,8 +196,9 @@ class Converter extends Runner
 
     public function download($downloadAs = null, $inline = false)
     {
-        if (count($this->pages)) {
+        if (self::$multiPage) {
             $this->put(implode('', $this->pages));
+            $this->resetPages();
 
             $filename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
         } else {
@@ -200,16 +207,17 @@ class Converter extends Runner
 
         $result = $this->save($filename);
 
-        // Error.
+        // Any warnings or errors,
+        // log them using PHP system logger
         if (trim($result)) {
-            return $result;
+            error_log($result);
         }
 
-        $path_parts = pathinfo($filename);
+        $pathParts = pathinfo($filename);
 
-        $downloadAs = $downloadAs? $downloadAs : $path_parts['basename'];
+        $downloadAs = $downloadAs? $downloadAs : $pathParts['basename'];
         $contentDisposition = $inline? 'inline' : 'attachment';
-        $contentType = $this->contentType($path_parts['extension']);
+        $contentType = $this->contentType($pathParts['extension']);
 
         if (file_exists($filename)) {
             header('Content-Description: File Transfer');
@@ -238,8 +246,10 @@ class Converter extends Runner
     public function save($destination)
     {
         // Multi pages pdf
-        if (count($this->pages)) {
-            $this->put(implode('', $this->pages));
+        if (self::$multiPage) {
+            if (count($this->pages)) {
+                $this->put(implode('', $this->pages));
+            }
 
             return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $destination, self::$pdfOptions);
         }
@@ -295,11 +305,6 @@ class Converter extends Runner
         $this->createTempFile();
 
         file_put_contents($this->getTempFilePath(), $content, FILE_APPEND);
-    }
-
-    protected function removeTempFile()
-    {
-        unlink($this->getTempFilePath());
     }
 
     public function pdfOptions(array $options)
@@ -362,6 +367,11 @@ class Converter extends Runner
             default:
                 return 'application/pdf';
         }
+    }
+
+    public function resetPages()
+    {
+        $this->pages = [];
     }
 
     public function clearTempFiles()
