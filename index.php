@@ -8,7 +8,8 @@ use Anam\Html2PdfConverter\Converter;
 $conv = new Converter();
 
 $conv->setBinary('phantomjs')
-	->addPage('https://facebook.com')
+	->source('http://code-chunk.com')
+    ->toPng(['width' => 1440])
 	//->toPdf(['width' => '900px', 'height' => '700px'])
 	//->save(dirname(__FILE__) . '/image2.pdf');
 	->download();

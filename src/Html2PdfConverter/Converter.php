@@ -2,6 +2,7 @@
 namespace Anam\Html2PdfConverter;
 
 use Exception;
+use Anam\Html2PdfConverter\Str;
 
 class Converter extends Runner
 {
@@ -29,8 +30,11 @@ class Converter extends Runner
     ];
 
     protected static $imageOptions = [
-        // Dimension in pixels, 720p.
-        'dimension'     => '1280px*720px',
+        // Dimension in pixels.
+        // if only width is given full webpage will render
+        // if both width and height is given,
+        // the image will be clipped to given width and height
+        'dimension'     => '1280px',
         // 1 = 100% zoom
         'zoomfactor'    => 1,
         'quality'       => '70'
@@ -342,8 +346,14 @@ class Converter extends Runner
             if (! ctype_digit($options['height'])) {
                 throw new Exception('Height must be a number');
             }
-            // generate dimension - i.e 1200px*1000px
+
             self::$imageOptions['dimension'] = $options['width'] . 'px' . '*' . $options['height'] . 'px';
+        } elseif (isset($options['width'])) {
+            if (! ctype_digit($options['width'])) {
+                throw new Exception('Width must be a number');
+            }
+
+            self::$imageOptions['dimension'] = $options['width'] . 'px';
         }
 
         return $this;
