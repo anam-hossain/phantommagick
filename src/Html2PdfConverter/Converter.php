@@ -258,7 +258,7 @@ class Converter extends Runner
             return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $destination, self::$pdfOptions);
         }
 
-        // Sigle page pdf
+        // Single page pdf
         if (self::$format === 'pdf') {
             return $this->run(self::$scripts['converter'], $this->getSource(), $destination, self::$pdfOptions);
         }
