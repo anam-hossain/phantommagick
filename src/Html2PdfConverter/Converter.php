@@ -6,6 +6,8 @@ use Anam\Html2PdfConverter\Str;
 
 class Converter extends Runner
 {
+    protected $driver = 'local';
+
     protected $tempFilePath;
 
     protected $source;
@@ -64,6 +66,25 @@ class Converter extends Runner
     public static function make($source)
     {
         return new self($source);
+    }
+
+    public function driver($driver)
+    {
+        if ($driver instanceof Aws\S3\S3Client) {
+
+        } elseif {
+
+        }
+    }
+
+    public function setDriver($driver)
+    {
+        $this->driver = $driver;
+    }
+
+    public function getDriver()
+    {
+        return $this->driver;
     }
 
     /**
