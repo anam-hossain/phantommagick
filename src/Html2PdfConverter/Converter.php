@@ -3,10 +3,14 @@ namespace Anam\Html2PdfConverter;
 
 use Exception;
 use Anam\Html2PdfConverter\Str;
+use League\Flysystem\AwsS3v2\AwsS3Adapter;
+use League\Flysystem\Filesystem;
 
 class Converter extends Runner
 {
     protected $driver = 'local';
+
+    protected $acl = 'private';
 
     protected $tempFilePath;
 
@@ -68,13 +72,32 @@ class Converter extends Runner
         return new self($source);
     }
 
-    public function driver($driver)
+    public function adapter($client)
     {
-        if ($driver instanceof Aws\S3\S3Client) {
+        $numargs = func_num_args();
 
-        } elseif {
+        //die(var_dump($numargs));
+        if ($client instanceof Aws\S3\S3Client) {
+            $this->setDriver('s3');
 
+            // $client , S3 client
+            // func_get_arg(1), Bucket name
+            // 3rd argument, 'optional-prefix' = path prefix
+            $adapter = new AwsS3Adapter($client, func_get_arg(1), null);
+
+            $filesystem = new Filesystem($adapter);
+
+            die(dump($filesystem));
         }
+    }
+
+    // Visibility : "public-read",  "private" for Amazon s3
+    // by default its Private.
+    public function acl($acl)
+    {
+        $this->acl = $acl;
+
+        return $this;
     }
 
     public function setDriver($driver)

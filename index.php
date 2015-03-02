@@ -15,11 +15,11 @@ $client = S3Client::factory(array(
 ));
 
 
-die(var_dump($client instanceof Aws\S3\S3Client));
-
+//die(var_dump($client instanceof Aws\S3\S3Client));
+//die(dump($client));
 // $adapter = new AwsS3Adapter($client, $config['AWS_BUCKET'], 'optional-prefix');
 $adapter = new AwsS3Adapter($client, $config['AWS_BUCKET']);
-die(var_dump($adapter));
+die(dump($adapter));
 
 use Anam\Html2PdfConverter\Converter;
 
