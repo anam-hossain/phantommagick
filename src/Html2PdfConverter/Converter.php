@@ -43,7 +43,7 @@ class Converter extends Runner
         'dimension'     => '1280px',
         // 1 = 100% zoom
         'zoomfactor'    => 1,
-        'quality'       => '70'
+        'quality'       => '80'
     ];
 
     // Supported image formats
