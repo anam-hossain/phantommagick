@@ -5,6 +5,7 @@ include "vendor/autoload.php";
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v2\AwsS3Adapter;
 use League\Flysystem\Filesystem;
+use Anam\Html2PdfConverter\Converter;
 
 $config = include(dirname(__FILE__) . '/.env.php');
 
@@ -14,14 +15,19 @@ $client = S3Client::factory(array(
     'region' => 'ap-southeast-2'
 ));
 
+$conv = new Converter();
+$conv->adapter($client);
 
-//die(var_dump($client instanceof Aws\S3\S3Client));
+//die(var_dump($conv));
+
+die(var_dump($client instanceof Aws\S3\S3Client));
 //die(dump($client));
 // $adapter = new AwsS3Adapter($client, $config['AWS_BUCKET'], 'optional-prefix');
-$adapter = new AwsS3Adapter($client, $config['AWS_BUCKET']);
-die(dump($adapter));
 
-use Anam\Html2PdfConverter\Converter;
+//$adapter = new AwsS3Adapter($client, $config['AWS_BUCKET']);
+//die(dump($adapter));
+
+//use Anam\Html2PdfConverter\Converter;
 
 //Converter::make('http://google.com')->toPdf();
 $conv = new Converter();

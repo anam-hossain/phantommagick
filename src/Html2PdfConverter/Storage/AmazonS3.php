@@ -6,8 +6,8 @@ use Aws\S3\S3Client;
 
 class AmazonS3 extends AwsS3Adapter
 {
-    public function __construct(S3Client $s3)
+    public function __construct(S3Client $client, $bucket, $prefix)
     {
-        parent::__construct($s3);
+        parent::__construct($client, $bucket, $prefix);
     }
 }

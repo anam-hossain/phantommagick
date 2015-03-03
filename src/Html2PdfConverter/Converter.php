@@ -3,7 +3,6 @@ namespace Anam\Html2PdfConverter;
 
 use Exception;
 use Anam\Html2PdfConverter\Str;
-use League\Flysystem\AwsS3v2\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 
 class Converter extends Runner
@@ -11,6 +10,8 @@ class Converter extends Runner
     protected $driver = 'local';
 
     protected $acl = 'private';
+
+    protected $filesystem;
 
     protected $tempFilePath;
 
@@ -74,20 +75,38 @@ class Converter extends Runner
 
     public function adapter($client)
     {
-        $numargs = func_num_args();
-
-        //die(var_dump($numargs));
-        if ($client instanceof Aws\S3\S3Client) {
+        if ($client instanceof \Aws\S3\S3Client) {
             $this->setDriver('s3');
 
+            $options = [
+                // Amazon S3 api version
+                'version'   => 2,
+                'prefix'    => null
+            ];
+
+            if (! isset(func_get_arg(1))) {
+                throw new Exception('S3 Bucket name is required');
+            }
+
+            if (isset(func_get_arg(2))) {
+                if (! is_array(func_get_arg(2)) {
+                    throw new Exception('Options must be an array');
+                }
+
+                $options = array_merge($options, func_get_arg(2));
+            }
+
+            $bucket = func_get_arg(1);
             // $client , S3 client
             // func_get_arg(1), Bucket name
             // 3rd argument, 'optional-prefix' = path prefix
-            $adapter = new AwsS3Adapter($client, func_get_arg(1), null);
+            if ($options['version'] === 3) {
+                $this->filesystem = new AmazonS3V3($client, $bucket, $options['prefix']);
+                return $this;
+            }
 
-            $filesystem = new Filesystem($adapter);
-
-            die(dump($filesystem));
+            $this->filesystem = new AmazonS3($client, $bucket, $options['prefix']);
+            return $this;
         }
     }
 
