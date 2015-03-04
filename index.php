@@ -16,7 +16,7 @@ $client = S3Client::factory(array(
 ));
 
 $conv = new Converter();
-$conv->adapter($client);
+$conv->adapter($client, 'phantom-magick');
 
 //die(var_dump($conv));
 

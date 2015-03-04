@@ -2,6 +2,7 @@
 namespace Anam\Html2PdfConverter;
 
 use Exception;
+use Anam\Html2PdfConverter\Adapter;
 use Anam\Html2PdfConverter\Str;
 use League\Flysystem\Filesystem;
 
@@ -75,39 +76,16 @@ class Converter extends Runner
 
     public function adapter($client)
     {
-        if ($client instanceof \Aws\S3\S3Client) {
-            $this->setDriver('s3');
+        $args = func_get_args();
 
-            $options = [
-                // Amazon S3 api version
-                'version'   => 2,
-                'prefix'    => null
-            ];
+        array_shift($args);
 
-            if (! isset(func_get_arg(1))) {
-                throw new Exception('S3 Bucket name is required');
-            }
+        $this->filesystem = new Filesystem((new Adapter($client, $args))->pick());
 
-            if (isset(func_get_arg(2))) {
-                if (! is_array(func_get_arg(2)) {
-                    throw new Exception('Options must be an array');
-                }
+        die(var_dump($this->filesystem));
 
-                $options = array_merge($options, func_get_arg(2));
-            }
-
-            $bucket = func_get_arg(1);
-            // $client , S3 client
-            // func_get_arg(1), Bucket name
-            // 3rd argument, 'optional-prefix' = path prefix
-            if ($options['version'] === 3) {
-                $this->filesystem = new AmazonS3V3($client, $bucket, $options['prefix']);
-                return $this;
-            }
-
-            $this->filesystem = new AmazonS3($client, $bucket, $options['prefix']);
-            return $this;
-        }
+        //new AmazonS3($client, $bucket, $options['prefix']);
+        return $this;
     }
 
     // Visibility : "public-read",  "private" for Amazon s3
@@ -117,16 +95,6 @@ class Converter extends Runner
         $this->acl = $acl;
 
         return $this;
-    }
-
-    public function setDriver($driver)
-    {
-        $this->driver = $driver;
-    }
-
-    public function getDriver()
-    {
-        return $this->driver;
     }
 
     /**
