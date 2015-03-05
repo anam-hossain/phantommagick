@@ -16,7 +16,17 @@ $client = S3Client::factory(array(
 ));
 
 $conv = new Converter();
-$conv->adapter($client, 'phantom-magick');
+$conv->source(dirname(__FILE__) . '/hello.html')
+    ->toPdf()
+    //->toPdf()
+    ->save(dirname(__FILE__) . '/hello.pdf');
+
+// $conv = new Converter();
+// $conv->adapter($client, 'phantom-magick')
+//     ->acl('public')
+//     ->source('http://joinform.com.au')
+//     ->toPng(['width' => '1200'])
+//     ->save();
 
 //die(var_dump($conv));
 
