@@ -2,10 +2,18 @@
 namespace Anam\Html2PdfConverter;
 
 use Exception;
+use Anam\Html2PdfConverter\Adapter;
 use Anam\Html2PdfConverter\Str;
+use League\Flysystem\Filesystem;
 
 class Converter extends Runner
 {
+    protected $driver = 'local';
+
+    protected $acl = 'private';
+
+    protected $filesystem;
+
     protected $tempFilePath;
 
     protected $source;
@@ -37,7 +45,7 @@ class Converter extends Runner
         'dimension'     => '1280px',
         // 1 = 100% zoom
         'zoomfactor'    => 1,
-        'quality'       => '70'
+        'quality'       => '80'
     ];
 
     // Supported image formats
@@ -64,6 +72,30 @@ class Converter extends Runner
     public static function make($source)
     {
         return new self($source);
+    }
+
+    public function adapter($client)
+    {
+        $args = func_get_args();
+
+        array_shift($args);
+
+        $adapter = new Adapter($client, $args);
+
+        $this->filesystem = new Filesystem($adapter->pick());
+
+        $this->driver = $adapter->getDriver();
+
+        return $this;
+    }
+
+    // Visibility : "public-read",  "private" for Amazon s3
+    // by default its Private.
+    public function acl($acl)
+    {
+        $this->acl = $acl;
+
+        return $this;
     }
 
     /**
@@ -200,19 +232,18 @@ class Converter extends Runner
 
     public function download($downloadAs = null, $inline = false)
     {
+        $filename = $this->getTempFilePath();
+
         if (self::$multiPage) {
             $this->put(implode('', $this->pages));
             $this->resetPages();
 
             $filename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
-        } else {
-            $filename = $this->getTempFilePath();
         }
 
         $result = $this->save($filename);
 
-        // Any warnings or errors,
-        // log them using PHP system logger
+        // Log warning or errors using PHP system logger
         if (trim($result)) {
             error_log($result);
         }
@@ -223,48 +254,102 @@ class Converter extends Runner
         $contentDisposition = $inline? 'inline' : 'attachment';
         $contentType = $this->contentType($pathParts['extension']);
 
-        if (file_exists($filename)) {
-            header('Content-Description: File Transfer');
-            header("Content-Type: {$contentType}");
-            header("Content-Disposition: {$contentDisposition}; filename={$downloadAs}");
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($filename));
-            readfile($filename);
-
-            unlink($filename);
-            $this->clearTempFiles();
-
-            exit;
+        if (! file_exists($filename)) {
+            error_log("Conversion failed.");
+            return "Conversion failed.";
         }
+
+        header('Content-Description: File Transfer');
+        header("Content-Type: {$contentType}");
+        header("Content-Disposition: {$contentDisposition}; filename={$downloadAs}");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filename));
+        readfile($filename);
+
+        unlink($filename);
+        $this->clearTempFiles();
+
+        exit;
     }
 
     /**
-     * Save the PDF to given file path.
+     * Save the PDF to given file path if driver is local.
+     * or Save file in cloud with provided filename
      *
-     * @param string $filename full physical path with filename
+     * @param string $filename full physical path with filename for local driver or just filename for cloud.
      * @return boolean
      **/
 
-    public function save($destination)
+    public function save($filename = null)
     {
-        // Multi pages pdf
+        if ($this->driver == 'local' && ! $filename) {
+            throw new Exception("Filename can not be empty. Please provide a full physical path with filename.");
+        }
+
+        if (! $filename) {
+            $pathParts = pathinfo($this->getSource());
+            $filename = $pathParts['filename'] . '.' . self::$format;
+
+            if (self::$multiPage) {
+                $filename = uniqid('phantom_magick') . '.' . self::$format;
+            }
+        }
+
+        if ($this->driver == 'local') {
+            return $this->saveLocal($filename);
+        }
+
+        return $this->saveCloud($filename);
+    }
+
+    public function saveLocal($filename)
+    {
         if (self::$multiPage) {
             if (count($this->pages)) {
                 $this->put(implode('', $this->pages));
             }
 
-            return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $destination, self::$pdfOptions);
+            return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $filename, self::$pdfOptions);
         }
 
         // Single page pdf
         if (self::$format === 'pdf') {
-            return $this->run(self::$scripts['converter'], $this->getSource(), $destination, self::$pdfOptions);
+            return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$pdfOptions);
         }
 
         // Image
-        return $this->run(self::$scripts['converter'], $this->getSource(), $destination, self::$imageOptions);
+        return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$imageOptions);
+    }
+
+    public function saveCloud($filename)
+    {
+        $tempFilename = $this->getTempFilePath();
+
+        // Multi page pdf
+        if (self::$multiPage) {
+            if (count($this->pages)) {
+                $this->put(implode('', $this->pages));
+            }
+
+            $tempFilename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
+
+            $this->run(self::$scripts['converter'], $this->getTempFilePath(), $tempFilename, self::$pdfOptions);
+
+        } elseif (self::$format === 'pdf') {
+            $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$pdfOptions);
+        } else {
+            $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$imageOptions);
+        }
+
+        if (file_exists($tempFilename)) {
+            $contents = file_get_contents($tempFilename);
+
+            unlink($tempFilename);
+
+            return $this->filesystem->put($filename, $contents, ['visibility' => $this->acl]);
+        }
     }
 
     public function pushContent($page)
