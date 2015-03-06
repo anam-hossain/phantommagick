@@ -232,19 +232,18 @@ class Converter extends Runner
 
     public function download($downloadAs = null, $inline = false)
     {
+        $filename = $this->getTempFilePath();
+
         if (self::$multiPage) {
             $this->put(implode('', $this->pages));
             $this->resetPages();
 
             $filename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
-        } else {
-            $filename = $this->getTempFilePath();
         }
 
         $result = $this->save($filename);
 
-        // Any warnings or errors,
-        // log them using PHP system logger
+        // Log warning or errors using PHP system logger
         if (trim($result)) {
             error_log($result);
         }
@@ -255,21 +254,24 @@ class Converter extends Runner
         $contentDisposition = $inline? 'inline' : 'attachment';
         $contentType = $this->contentType($pathParts['extension']);
 
-        if (file_exists($filename)) {
-            header('Content-Description: File Transfer');
-            header("Content-Type: {$contentType}");
-            header("Content-Disposition: {$contentDisposition}; filename={$downloadAs}");
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($filename));
-            readfile($filename);
-
-            unlink($filename);
-            $this->clearTempFiles();
-
-            exit;
+        if (! file_exists($filename)) {
+            error_log("Conversion failed.");
+            return "Conversion failed.";
         }
+
+        header('Content-Description: File Transfer');
+        header("Content-Type: {$contentType}");
+        header("Content-Disposition: {$contentDisposition}; filename={$downloadAs}");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filename));
+        readfile($filename);
+
+        unlink($filename);
+        $this->clearTempFiles();
+
+        exit;
     }
 
     /**
@@ -341,7 +343,7 @@ class Converter extends Runner
             $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$imageOptions);
         }
 
-        if(file_exists($tempFilename)) {
+        if (file_exists($tempFilename)) {
             $contents = file_get_contents($tempFilename);
 
             unlink($tempFilename);
