@@ -26,7 +26,7 @@ $conv->adapter($client, 'phantom-magick')
     ->acl('public')
     ->source('http://joinform.com.au')
     ->toPng(['width' => '1200'])
-    ->save();
+    ->download();
 
 //die(var_dump($conv));
 

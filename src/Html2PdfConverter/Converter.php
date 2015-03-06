@@ -232,6 +232,8 @@ class Converter extends Runner
 
     public function download($downloadAs = null, $inline = false)
     {
+        $this->driver = 'local';
+
         $filename = $this->getTempFilePath();
 
         if (self::$multiPage) {
