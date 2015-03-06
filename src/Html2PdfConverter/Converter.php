@@ -232,6 +232,7 @@ class Converter extends Runner
 
     public function download($downloadAs = null, $inline = false)
     {
+        // Force "local" driver.
         $this->driver = 'local';
 
         $filename = $this->getTempFilePath();

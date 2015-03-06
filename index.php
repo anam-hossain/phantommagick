@@ -6,14 +6,54 @@ use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v2\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 use Anam\Html2PdfConverter\Converter;
+use Dropbox\Client;
+use League\Flysystem\Dropbox\DropboxAdapter;
+use OpenCloud\OpenStack;
+use OpenCloud\Rackspace;
+use League\Flysystem\Rackspace\RackspaceAdapter;
 
+//Rackspace
+//https://identity.api.rackspacecloud.com/v2.0/
 $config = include(dirname(__FILE__) . '/.env.php');
+
+$client = new OpenStack(Rackspace::US_IDENTITY_ENDPOINT, array(
+    'username' => $config['RACKSPACE_USERNAME'],
+    'password' => $config['RACKSPACE_PASSWORD']
+));
+
+$store = $client->objectStoreService('cloudFiles', 'SYD');
+$container = $store->getContainer('phantom-magick');
+
+
+$conv = new Converter();
+$conv->adapter($container)
+    ->source('https://google.com')
+    ->toPdf()
+    ->save();
+
+die(var_dump($container));
+$filesystem = new Filesystem(new RackspaceAdapter($container));
+
+die(var_dump($client instanceof Dropbox\Client));
+
+
+$client = new Client($config['DROPBOX_TOKEN'], $config['DROPBOX_APP']);
+//$filesystem = new Filesystem(new DropboxAdapter($client));
+
+$conv = new Converter();
+$conv->adapter($client)
+    ->source('https://google.com')
+    ->toPdf()
+    ->save();
+
+die(var_dump($client instanceof Dropbox\Client));
 
 $client = S3Client::factory(array(
     'key'    => $config['AWS_KEY'],
     'secret' => $config['AWS_SECRET'],
     'region' => 'ap-southeast-2'
 ));
+
 
 // $conv = new Converter();
 // $conv->source(dirname(__FILE__) . '/hello.html')

@@ -27,10 +27,25 @@ class Adapter
 
     public function pick()
     {
+        // Amazon S3
         if ($this->client instanceof \Aws\S3\S3Client) {
             $this->setDriver('s3');
 
             return $this->s3();
+        }
+
+        // Dropbox
+        if ($this->client instanceof \Dropbox\Client) {
+            $this->setDriver('dropbox');
+
+            return $this->dropbox();
+        }
+
+        // Rackspace cloudFiles
+        if ($this->client instanceof \OpenCloud\ObjectStore\Resource\Container) {
+            $this->setDriver('rackspace');
+
+            return $this->rackspace();
         }
     }
 
@@ -65,6 +80,17 @@ class Adapter
 
     public function dropbox()
     {
+        $prefix = null;
 
+        if (isset($this->args[0])) {
+            $prefix = $this->args[0];
+        }
+
+        return new \League\Flysystem\Dropbox\DropboxAdapter($this->client, $prefix);
+    }
+
+    public function rackspace()
+    {
+        return new \League\Flysystem\Rackspace\RackspaceAdapter($this->client);
     }
 }

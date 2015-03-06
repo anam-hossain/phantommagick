@@ -25,8 +25,12 @@
     "require": {
         "php": ">=5.4.0",
         "aws/aws-sdk-php": "~2.0",
+        "dropbox/dropbox-sdk": "1.1.*",
+        "rackspace/php-opencloud": "1.12.1",
         "league/flysystem": "~1.0",
         "league/flysystem-aws-s3-v2": "~1.0",
+        "league/flysystem-dropbox": "1.0.0",
+        "league/flysystem-rackspace": "1.0.0",
         "jakoch/phantomjs-installer": "1.9.8"
     },
     "require-dev": {
