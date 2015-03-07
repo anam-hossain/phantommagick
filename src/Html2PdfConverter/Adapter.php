@@ -71,7 +71,7 @@ class Adapter
 
         $bucket = $this->args[0];
 
-        if ($options['version'] == 3) {
+        if ($options['version'] >= 3 || $options['version'] == 'latest') {
             return new \League\Flysystem\AwsS3v3\AwsS3Adapter($this->client, $bucket, $options['prefix']);
         }
 
