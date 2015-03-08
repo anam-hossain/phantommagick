@@ -5,26 +5,64 @@ use Exception;
 
 class Adapter
 {
+    /**
+     * The driver of the Filesystem
+     *
+     * @var string
+     */
     protected $driver = 'local';
+
+    /**
+     * Filesystem client. S3|Dropbox|Rackspace.
+     *
+     * @var mixed
+     */
     protected $client;
+
+    /**
+     * Client related options
+     *
+     * @var array
+     */
     protected $args;
 
+    /**
+     * Constructor
+     *
+     * @param mixed $client
+     * @param array  $args
+     */
     public function __construct($client, array $args = array())
     {
         $this->client = $client;
         $this->args = $args;
     }
 
+    /**
+     * Set the Filesystem driver
+     *
+     * @param string $driver
+     */
     public function setDriver($driver)
     {
         $this->driver = $driver;
     }
 
+    /**
+     * Get the driver
+     *
+     * @return string
+     */
     public function getDriver()
     {
         return $this->driver;
     }
 
+    /**
+     * Determine which Flysystem adapter required
+     *
+     * @return mixed
+     */
     public function pick()
     {
         // Amazon S3
@@ -49,6 +87,11 @@ class Adapter
         }
     }
 
+    /**
+     * Create a new AwsS3Adapter instance.
+     *
+     * @return mixed
+     */
     public function s3()
     {
         $options = [
@@ -78,6 +121,11 @@ class Adapter
         return new \League\Flysystem\AwsS3v2\AwsS3Adapter($this->client, $bucket, $options['prefix']);
     }
 
+    /**
+     * Create a new DropboxAdapter instance.
+     *
+     * @return \League\Flysystem\Dropbox\DropboxAdapter
+     */
     public function dropbox()
     {
         $prefix = null;
@@ -89,6 +137,11 @@ class Adapter
         return new \League\Flysystem\Dropbox\DropboxAdapter($this->client, $prefix);
     }
 
+    /**
+     * Create a new RackspaceAdapter instance.
+     *
+     * @return \League\Flysystem\Rackspace\RackspaceAdapter
+     */
     public function rackspace()
     {
         return new \League\Flysystem\Rackspace\RackspaceAdapter($this->client);
