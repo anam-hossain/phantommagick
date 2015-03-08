@@ -11,24 +11,75 @@ use League\Flysystem\Filesystem;
 
 class Converter extends Runner
 {
+    /**
+     * The driver of the Filesystem
+     *
+     * @var string
+     */
     protected $driver = 'local';
 
+    /**
+     * The visibily of the file
+     *
+     * @var string
+     */
     protected $acl = 'private';
 
+    /**
+     * The Filesystem instance.
+     *
+     * @var \League\Flysystem\Filesystem  $filesystem
+     */
     protected $filesystem;
 
+    /**
+     * The temporary directory path
+     *
+     * @var [type]
+     */
     protected $tempFilePath;
 
+    /**
+     * The source of the html data.
+     * Source might be the physical file path or URL.
+     *
+     * @var string
+     */
     protected $source;
 
+    /**
+     * The output file format
+     *
+     * @var string
+     */
     private static $format = 'pdf';
 
+    /**
+     * Multiple HTML pages.
+     *
+     * @var array
+     */
     protected $pages = [];
 
+    /**
+     * Indicates if the conversion is multi pages or not.
+     *
+     * @var boolean
+     */
     protected static $multiPage = false;
 
+    /**
+     * The conversion scripts.
+     *
+     * @var array
+     */
     protected static $scripts = [];
 
+    /**
+     * Default PDF settings
+     *
+     * @var array
+     */
     protected static $pdfOptions = [
         //Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'
         'format'        => 'A4',
@@ -40,6 +91,11 @@ class Converter extends Runner
         'margin'        => '1cm'
     ];
 
+    /**
+     * Default Image settings
+     *
+     * @var array
+     */
     protected static $imageOptions = [
         // Dimension in pixels.
         // if only width is given full webpage will render
@@ -51,13 +107,22 @@ class Converter extends Runner
         'quality'       => '80'
     ];
 
-    // Supported image formats
+    /**
+     * Supported image formats
+     *
+     * @var array
+     */
     protected static $imageFormats = [
         'png' => '.png',
         'jpg' => '.jpg',
         'gif' => '.gif'
     ];
 
+    /**
+     * Initialize the Converter
+     *
+     * @param string  $source  source of the data file
+     */
     public function __construct($source = null)
     {
         $this->initialize();
@@ -67,16 +132,33 @@ class Converter extends Runner
         }
     }
 
+    /**
+     * Initialize the converter settings
+     *
+     * @return void
+     */
     private function initialize()
     {
         self::$scripts['converter'] = dirname(__FILE__) . '/scripts/phantom_magick.js';
     }
 
+    /**
+     * Create a new Converter instance.
+     *
+     * @param  string $source  Source of the data file
+     * @return Converter
+     */
     public static function make($source)
     {
         return new self($source);
     }
 
+    /**
+     * Pick Flysystem adapter for a client
+     *
+     * @param  mixed $client
+     * @return $this
+     */
     public function adapter($client)
     {
         $args = func_get_args();
@@ -92,8 +174,12 @@ class Converter extends Runner
         return $this;
     }
 
-    // Visibility : "public-read",  "private" for Amazon s3
-    // by default its Private.
+    /**
+     * Set visibility
+     *
+     * @param  string $acl
+     * @return $this
+     */
     public function acl($acl)
     {
         $this->acl = $acl;
@@ -104,8 +190,8 @@ class Converter extends Runner
     /**
      * Set PhantomJS binary location
      *
-     * @param string $path
-     * @return void
+     * @param string $binary phantomsjs location
+     * @return $this
      **/
     public function setBinary($binary)
     {
@@ -117,27 +203,43 @@ class Converter extends Runner
     }
 
     /**
-     * Get the Executatabe PhantomJS binary source
+     * Get the Executable PhantomJS binary source
      *
-     * @param string $path
      * @return string
-     **/
+     */
 
     public function getBinary()
     {
         return $this->binary;
     }
 
+    /**
+     * Set the temporary file path
+     *
+     * @param string $filename
+     * @return void
+     */
     public function setTempFilePath($filename)
     {
         $this->tempFilePath = $filename;
     }
 
+    /**
+     * Get the temporary file location
+     *
+     * @return string
+     */
     public function getTempFilePath()
     {
         return $this->tempFilePath;
     }
 
+    /**
+     * Set the data source
+     *
+     * @param string $source
+     * @return $this
+     */
     public function setSource($source)
     {
         $this->source = $source;
@@ -145,17 +247,33 @@ class Converter extends Runner
         return $this;
     }
 
+    /**
+     * Get the data source
+     *
+     * @return string
+     */
     public function getSource()
     {
         return $this->source;
     }
 
-    // Alias of setSource($source)
+    /**
+     * Alias of the setSource()
+     *
+     * @param  string $source
+     * @return string
+     */
     public function source($source)
     {
         return $this->setSource($source);
     }
 
+    /**
+     * Prepare converter for pdf conversion
+     *
+     * @param  array  $options PDF settings
+     * @return $this
+     */
     public function toPdf(array $options = array())
     {
         $this->pdfOptions($options);
@@ -165,26 +283,60 @@ class Converter extends Runner
         return $this;
     }
 
+    /**
+     * Prepare converter for PNG conversion
+     *
+     * @param  array  $options Image settings
+     * @return $this
+     */
     public function toPng(array $options = array())
     {
         return $this->prepareImage($options, $format = 'png');
     }
 
+    /**
+     * Prepare converter for JPG conversion
+     *
+     * @param  array  $options Image settings
+     * @return $this
+     */
     public function toJpg(array $options = array())
     {
         return $this->prepareImage($options, $format = 'jpg');
     }
 
+    /**
+     * Prepare converter for GIF conversion
+     *
+     * @param  array  $options Image settings
+     * @return $this
+     */
     public function toGif(array $options = array())
     {
         return $this->prepareImage($options, $format = 'gif');
     }
 
-    // Alias of prepareImage()
+    /**
+     * Prepare converter for Image conversion
+     *
+     * @param  array  $options Image settings
+     * @param string $format Image format JPG|PNG|GIF
+     *
+     * @return $this
+     */
     public function toImage($options, $format = 'png')
     {
         return $this->prepareImage($options, $format);
     }
+
+    /**
+     * Prepare converter for Image conversion
+     *
+     * @param  array  $options Image settings
+     * @param string $format Image format JPG|PNG|GIF
+     *
+     * @return $this
+     */
 
     public function prepareImage($options, $format = 'png')
     {
@@ -203,7 +355,11 @@ class Converter extends Runner
         return $this;
     }
 
-
+    /**
+     * Add HTMl page
+     *
+     * @param string $page Data file path|URL|Raw html code
+     */
     public function addPage($page)
     {
         self::$multiPage = true;
@@ -217,7 +373,12 @@ class Converter extends Runner
         return $this;
     }
 
-
+    /**
+     * Add multiple pages
+     *
+     * @param array $pages Data files paths|URLs|Raw HTML code
+     * @return $this
+     */
     public function addPages(array $pages)
     {
         self::$multiPage = true;
@@ -233,6 +394,13 @@ class Converter extends Runner
         return $this;
     }
 
+    /**
+     * Force download file when conversion is completed
+     *
+     * @param  string  $downloadAs filename
+     * @param  boolean $inline     Show file in browser or not
+     * @return void
+     */
     public function download($downloadAs = null, $inline = false)
     {
         // Force "local" driver.
@@ -281,11 +449,11 @@ class Converter extends Runner
     }
 
     /**
-     * Save the PDF to given file path if driver is local.
+     * Save PDF|Image to the given file path if driver is local.
      * or Save file in cloud with provided filename
      *
      * @param string $filename full physical path with filename for local driver or just filename for cloud.
-     * @return boolean
+     * @return mixed
      **/
 
     public function save($filename = null)
@@ -310,6 +478,12 @@ class Converter extends Runner
         return $this->saveCloud($filename);
     }
 
+    /**
+     * Save PDF|Image to the given file path.
+     *
+     * @param string $filename full physical path with filename
+     * @return mixed
+     **/
     public function saveLocal($filename)
     {
         if (self::$multiPage) {
@@ -329,6 +503,12 @@ class Converter extends Runner
         return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$imageOptions);
     }
 
+    /**
+     * Save PDF|Image to the cloud.
+     *
+     * @param string $filename.
+     * @return mixed
+     **/
     public function saveCloud($filename)
     {
         $tempFilename = $this->getTempFilePath();
@@ -358,6 +538,12 @@ class Converter extends Runner
         }
     }
 
+    /**
+     * Push data to pages
+     *
+     * @param  string $page file path|URL|Raw HTML
+     * @return void
+     */
     public function pushContent($page)
     {
         // @file_get_contents will not throw any exception due to @ symbol
@@ -375,6 +561,11 @@ class Converter extends Runner
         array_push($this->pages, $content);
     }
 
+    /**
+     * Add page break to pages
+     *
+     * @return void
+     */
     public function pageBreak()
     {
         $content = '<div style="page-break-after:always;"><!-- page break --></div>';
@@ -382,7 +573,11 @@ class Converter extends Runner
         array_push($this->pages, $content);
     }
 
-    // Only multipages required to create a html file
+    /**
+     * Create a temporary html file for converting mutipages pdf
+     *
+     * @return string
+     */
     protected function createTempFile()
     {
         $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
@@ -395,6 +590,12 @@ class Converter extends Runner
     }
 
 
+    /**
+     * Add contents to the tempfile file.
+     *
+     * @param  string $content
+     * @return void
+     */
     protected function put($content)
     {
         $this->createTempFile();
@@ -402,6 +603,12 @@ class Converter extends Runner
         file_put_contents($this->getTempFilePath(), $content, FILE_APPEND);
     }
 
+    /**
+     * Update PDF settings
+     *
+     * @param  array  $options
+     * @return $this
+     */
     public function pdfOptions(array $options)
     {
         foreach ($options as $key => $option) {
@@ -419,6 +626,13 @@ class Converter extends Runner
 
         return $this;
     }
+
+    /**
+     * Update image settings
+     *
+     * @param  array  $options
+     * @return $this
+     */
 
     public function imageOptions(array $options)
     {
@@ -450,6 +664,12 @@ class Converter extends Runner
         return $this;
     }
 
+    /**
+     * Determine file mime
+     *
+     * @param  string $ext
+     * @return string
+     */
     protected function contentType($ext)
     {
         switch ($ext) {
@@ -470,11 +690,20 @@ class Converter extends Runner
         }
     }
 
+    /**
+     * Reset pages
+     * @return void
+     */
     public function resetPages()
     {
         $this->pages = [];
     }
 
+    /**
+     * Remove temporary files
+     *
+     * @return void
+     */
     public function clearTempFiles()
     {
         if (file_exists($this->getTempFilePath())) {
