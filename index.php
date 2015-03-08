@@ -16,6 +16,13 @@ use League\Flysystem\Rackspace\RackspaceAdapter;
 //https://identity.api.rackspacecloud.com/v2.0/
 $config = include(dirname(__FILE__) . '/.env.php');
 
+$conv = new Converter();
+$conv->source('http://joinform.com.au')
+    ->toPng(['width' => '1200'])
+    ->save();
+
+die(var_dump($conv));
+
 $client = new OpenStack(Rackspace::US_IDENTITY_ENDPOINT, array(
     'username' => $config['RACKSPACE_USERNAME'],
     'password' => $config['RACKSPACE_PASSWORD']

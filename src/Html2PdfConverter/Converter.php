@@ -2,6 +2,9 @@
 namespace Anam\Html2PdfConverter;
 
 use Exception;
+use RuntimeException;
+use InvalidArgumentException;
+use Anam\Html2PdfConverter\Exception\FileFormatNotSupportedException;
 use Anam\Html2PdfConverter\Adapter;
 use Anam\Html2PdfConverter\Str;
 use League\Flysystem\Filesystem;
@@ -188,7 +191,7 @@ class Converter extends Runner
         $format = strtolower($format);
 
         if (! array_key_exists($format, self::$imageFormats)) {
-            throw new Exception("\'{$format}\' file format not Supported.");
+            throw new FileFormatNotSupportedException("{$format} file format not Supported.");
         }
 
         self::$format = $format;
@@ -288,7 +291,7 @@ class Converter extends Runner
     public function save($filename = null)
     {
         if ($this->driver == 'local' && ! $filename) {
-            throw new Exception("Filename can not be empty. Please provide a full physical path with filename.");
+            throw new InvalidArgumentException("Filename can not be empty. Please provide a full physical path with filename.");
         }
 
         if (! $filename) {
@@ -385,7 +388,7 @@ class Converter extends Runner
         $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
 
         if (! touch($this->getTempFilePath())) {
-            throw new Exception('Unable to create file in PHP temp directory: '. sys_get_temp_dir());
+            throw new RuntimeException('Unable to create file in temp directory: '. sys_get_temp_dir());
         }
 
         return $this->getTempFilePath();
