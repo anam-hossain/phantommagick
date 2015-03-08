@@ -7,10 +7,17 @@ use Anam\Html2PdfConverter\Str;
 class Runner
 {
     /**
-     * @var string Path to phantomjs binary.
-     **/
+     * Executable phantomjs binary path
+     *
+     * @var string
+     */
     protected $binary = 'phantomjs';
 
+    /**
+     * Constructor
+     *
+     * @param string $binary
+     */
     public function __construct($binary = null)
     {
         if ($binary !== null) {
@@ -18,6 +25,14 @@ class Runner
         }
     }
 
+    /**
+     * Run the phantomjs command
+     * @param  string $script  Conversion script
+     * @param  string $source  Data file location
+     * @param  string $output  Output file location
+     * @param  array  $options
+     * @return string
+     */
     public function run($script, $source, $output, array $options = array())
     {
         $this->verifyBinary($this->binary);
@@ -31,6 +46,12 @@ class Runner
         return shell_exec($command);
     }
 
+    /**
+     * Escape shell arguments
+     *
+     * @param  array  $arguments
+     * @return array
+     */
     private function escapeShellArguments(array $arguments)
     {
         foreach ($arguments as $key => $argument) {
@@ -40,6 +61,12 @@ class Runner
         return $arguments;
     }
 
+    /**
+     * Check phantomjs exist or not
+     *
+     * @param  string $binary  Binary location
+     * @return void
+     */
     public function verifyBinary($binary)
     {
         $uname = strtolower(php_uname());
