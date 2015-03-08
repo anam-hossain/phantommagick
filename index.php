@@ -19,7 +19,7 @@ $config = include(dirname(__FILE__) . '/.env.php');
 $conv = new Converter();
 $conv->source('http://joinform.com.au')
     ->toPng(['width' => '1200'])
-    ->save();
+    ->download('joinform.png');
 
 die(var_dump($conv));
 
