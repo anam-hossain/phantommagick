@@ -395,6 +395,70 @@ class Converter extends Runner
     }
 
     /**
+     * Push data to pages
+     *
+     * @param  string $page file path|URL|Raw HTML
+     * @return void
+     */
+    public function pushContent($page)
+    {
+        // @file_get_contents will not throw any exception due to @ symbol
+        // file_get_contents will try to load file from physical path or from an URL
+        // and will return the content as string
+        // If failed, it will return false.
+
+        $content = @file_get_contents($page);
+
+        // Perhaps raw HTML content.
+        if (! $content) {
+            $content = $page;
+        }
+
+        array_push($this->pages, $content);
+    }
+
+    /**
+     * Add page break to pages
+     *
+     * @return void
+     */
+    public function pageBreak()
+    {
+        $content = '<div style="page-break-after:always;"><!-- page break --></div>';
+
+        array_push($this->pages, $content);
+    }
+
+    /**
+     * Add contents to the tempfile file.
+     *
+     * @param  string $content
+     * @return void
+     */
+    protected function put($content)
+    {
+        $this->createTempFile();
+
+        file_put_contents($this->getTempFilePath(), $content, FILE_APPEND);
+    }
+
+    /**
+     * Create a temporary html file for converting mutipages pdf
+     *
+     * @return string
+     */
+    protected function createTempFile()
+    {
+        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
+
+        if (! touch($this->getTempFilePath())) {
+            throw new RuntimeException('Unable to create file in temp directory: '. sys_get_temp_dir());
+        }
+
+        return $this->getTempFilePath();
+    }
+
+    /**
      * Force download file when conversion is completed
      *
      * @param  string  $downloadAs filename
@@ -536,71 +600,6 @@ class Converter extends Runner
 
             return $this->filesystem->put($filename, $contents, ['visibility' => $this->acl]);
         }
-    }
-
-    /**
-     * Push data to pages
-     *
-     * @param  string $page file path|URL|Raw HTML
-     * @return void
-     */
-    public function pushContent($page)
-    {
-        // @file_get_contents will not throw any exception due to @ symbol
-        // file_get_contents will try to load file from physical path or from an URL
-        // and will return the content as string
-        // If failed, it will return false.
-
-        $content = @file_get_contents($page);
-
-        // Perhaps raw HTML content.
-        if (! $content) {
-            $content = $page;
-        }
-
-        array_push($this->pages, $content);
-    }
-
-    /**
-     * Add page break to pages
-     *
-     * @return void
-     */
-    public function pageBreak()
-    {
-        $content = '<div style="page-break-after:always;"><!-- page break --></div>';
-
-        array_push($this->pages, $content);
-    }
-
-    /**
-     * Create a temporary html file for converting mutipages pdf
-     *
-     * @return string
-     */
-    protected function createTempFile()
-    {
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
-
-        if (! touch($this->getTempFilePath())) {
-            throw new RuntimeException('Unable to create file in temp directory: '. sys_get_temp_dir());
-        }
-
-        return $this->getTempFilePath();
-    }
-
-
-    /**
-     * Add contents to the tempfile file.
-     *
-     * @param  string $content
-     * @return void
-     */
-    protected function put($content)
-    {
-        $this->createTempFile();
-
-        file_put_contents($this->getTempFilePath(), $content, FILE_APPEND);
     }
 
     /**
