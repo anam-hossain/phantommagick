@@ -106,4 +106,24 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('quality', $this->converter->getImageOptions());
     }
+
+    public function testContentType()
+    {
+        $mime = $this->converter->contentType('pdf');
+
+        $this->assertEquals('application/pdf', $mime);
+    }
+
+    public function testPagesIsEmpty()
+    {
+        $this->assertTrue(empty($this->converter->getPages()));
+    }
+
+    public function testPagesIsNotEmpty()
+    {
+        $this->converter->addPage('http://google.com');
+
+        $this->assertFalse(empty($this->converter->getPages()));
+    }
+
 }

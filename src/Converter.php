@@ -439,6 +439,16 @@ class Converter extends Runner
     }
 
     /**
+     * Get pages
+     *
+     * @return array
+     */
+    public function getPages()
+    {
+       return $this->pages;
+    }
+
+    /**
      * Add page break to pages
      *
      * @return void
@@ -711,7 +721,7 @@ class Converter extends Runner
      * @param  string $ext
      * @return string
      */
-    protected function contentType($ext)
+    public function contentType($ext)
     {
         switch ($ext) {
             case 'pdf':
