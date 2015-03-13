@@ -39,14 +39,6 @@ class Converter extends Runner
     protected $tempFilePath;
 
     /**
-     * The output file location.
-     * Only available when driven is local.
-     *
-     * @var string
-     */
-    protected $outputFileLocation;
-
-    /**
      * The source of the html data.
      * Source might be the physical file path or URL.
      *
@@ -241,27 +233,6 @@ class Converter extends Runner
     public function setTempFilePath($filename)
     {
         $this->tempFilePath = $filename;
-    }
-
-    /**
-     * Get the output file location
-     *
-     * @return string
-     */
-    public function getOutputFileLocation()
-    {
-        return $this->outputFileLocation;
-    }
-
-     /**
-     * Set the output file location
-     *
-     * @param string $filename
-     * @return void
-     */
-    public function setOutputFileLocation($filename)
-    {
-        $this->outputFileLocation = $filename;
     }
 
     /**
