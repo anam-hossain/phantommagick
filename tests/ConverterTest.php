@@ -94,4 +94,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($options, $this->converter->getPdfOptions());
     }
+
+    public function testImageOptions()
+    {
+        $options = [
+            'dimension'     => '900px',
+            'zoomfactor'    => 1,
+        ];
+
+        $this->converter->imageOptions($options);
+
+        $this->assertArrayHasKey('quality', $this->converter->getImageOptions());
+    }
 }
