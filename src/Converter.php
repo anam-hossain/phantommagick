@@ -213,6 +213,18 @@ class Converter extends Runner
     }
 
     /**
+     * Get the driver of the filesystem
+     *
+     * @return string
+     */
+
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+
+    /**
      * Set the temporary file path
      *
      * @param string $filename
@@ -636,6 +648,16 @@ class Converter extends Runner
     }
 
     /**
+     * Get PDF settings
+     *
+     * @return $array
+     */
+    public function getPdfOptions()
+    {
+        return self::$pdfOptions;
+    }
+
+    /**
      * Update image settings
      *
      * @param  array  $options
@@ -671,6 +693,17 @@ class Converter extends Runner
 
         return $this;
     }
+
+    /**
+     * Get Image settings
+     *
+     * @return $array
+     */
+    public function getImageOptions()
+    {
+        return self::$imageOptions;
+    }
+
 
     /**
      * Determine file mime

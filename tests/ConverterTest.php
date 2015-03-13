@@ -3,10 +3,12 @@ namespace Anam\Html2PdfConverter\Test;
 
 use Exception;
 use RuntimeException;
+use Mockery;
 use Anam\Html2PdfConverter\Converter;
 use League\Flysystem\Filesystem;
 use Anam\Html2PdfConverter\Adapter;
 use Anam\Html2PdfConverter\Exception\FileFormatNotSupportedException;
+use Aws\S3\S3Client;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +27,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains('phantom_magick.js', $this->converter->getScript(), 'Verify that phantom_magick.js is used');
     }
-
 
     public function testMake()
     {
@@ -50,5 +51,47 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter->source('http://code-chunk.com');
 
         $this->assertEquals('http://code-chunk.com', $this->converter->getSource());
+    }
+
+    public function testDefaultFileSystemDriverIsLocal()
+    {
+        $this->assertEquals('local', $this->converter->getDriver());
+    }
+
+    public function testFileSystemDriverIsS3WhenS3ClientIsUsedAsClient()
+    {
+        $client = S3Client::factory(array(
+            'key'    => 'dummy-key-123',
+            'secret' => 'dummy-secret-123'
+        ));
+
+        $this->converter->adapter($client, 'dummy-bucket');
+
+        $this->assertEquals('s3', $this->converter->getDriver());
+    }
+
+    public function testGetTempFilePath()
+    {
+        $path = '/dummy/file/path';
+
+        $this->converter->setTempFilePath($path);
+
+        $this->assertEquals($path, $this->converter->getTempFilePath());
+    }
+
+    public function testPdfOptions()
+    {
+        $options = [
+            'format'        => 'A3',
+            'zoomfactor'    => 2,
+            'quality'       => '100',
+            'orientation'   => 'landscape',
+            'margin'        => '2cm'
+
+        ];
+
+        $this->converter->pdfOptions($options);
+
+        $this->assertEquals($options, $this->converter->getPdfOptions());
     }
 }
