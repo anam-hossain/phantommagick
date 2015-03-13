@@ -6,7 +6,6 @@ use RuntimeException;
 use InvalidArgumentException;
 use Anam\Html2PdfConverter\Exception\FileFormatNotSupportedException;
 use Anam\Html2PdfConverter\Adapter;
-use Anam\Html2PdfConverter\Str;
 use League\Flysystem\Filesystem;
 
 class Converter extends Runner
@@ -154,7 +153,7 @@ class Converter extends Runner
     }
 
     /**
-     * Pick Flysystem adapter for a client
+     * Pick appropriate Flysystem adapter for a client
      *
      * @param  mixed $client
      * @return $this
@@ -232,6 +231,16 @@ class Converter extends Runner
     public function getTempFilePath()
     {
         return $this->tempFilePath;
+    }
+
+    /**
+     * Get the conversion scripts
+     *
+     * @return array
+     */
+    public function getScript()
+    {
+        return self::$scripts['converter'];
     }
 
     /**

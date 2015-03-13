@@ -2,6 +2,7 @@
 namespace Anam\Html2PdfConverter;
 
 use Exception;
+use InvalidArgumentException;
 
 class Adapter
 {
@@ -101,12 +102,12 @@ class Adapter
         ];
 
         if (! isset($this->args[0])) {
-            throw new Exception('S3 Bucket name is required');
+            throw new InvalidArgumentException('S3 Bucket name is required');
         }
 
         if (isset($this->args[1])) {
             if (! is_array($this->args[1])) {
-                throw new Exception('Options must be an array');
+                throw new InvalidArgumentException('Options must be an array');
             }
 
             $options = array_merge($options, $this->args[1]);
