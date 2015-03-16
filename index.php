@@ -12,14 +12,30 @@ use OpenCloud\OpenStack;
 use OpenCloud\Rackspace;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 
-//Rackspace
-//https://identity.api.rackspacecloud.com/v2.0/
 $config = include(dirname(__FILE__) . '/.env.php');
 
+//Amazon S3
+
+$client = S3Client::factory(array(
+    'key'    => $config['AWS_KEY'],
+    'secret' => $config['AWS_SECRET'],
+    'region' => 'ap-southeast-2'
+));
+
 $conv = new Converter();
-$conv->source('http://joinform.com.au')
+$conv->adapter($client, 'phantom-magick')
+    ->acl('public')
+    ->source('http://joinform.com.au')
     ->toPng(['width' => '1200'])
-    ->download('joinform.png');
+    ->save();
+
+//Local
+//https://identity.api.rackspacecloud.com/v2.0/
+
+$conv = new Converter();
+$conv->source('/Applications/MAMP/htdocs/html2pdfconverter/tests/test_page.html')
+    ->toPng(['width' => '1200'])
+    ->save('/var/folders/k2/tp8p_jz5677bfyq904m7twl00000gn/Thello.png');
 
 die(var_dump($conv));
 

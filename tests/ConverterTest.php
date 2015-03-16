@@ -16,6 +16,21 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     protected $converter;
 
+    protected $pdfOptions = [
+        'format'        => 'A3',
+        'zoomfactor'    => 2,
+        'quality'       => '100',
+        'orientation'   => 'landscape',
+        'margin'        => '2cm'
+
+    ];
+
+    protected $imageOptions = [
+        'dimension'     => '1000px',
+        'zoomfactor'    => 2,
+        'quality'       => '90'
+    ];
+
     public function setUp()
     {
         $this->converter = new Converter();
@@ -81,18 +96,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testPdfOptions()
     {
-        $options = [
-            'format'        => 'A3',
-            'zoomfactor'    => 2,
-            'quality'       => '100',
-            'orientation'   => 'landscape',
-            'margin'        => '2cm'
+        $this->converter->pdfOptions($this->pdfOptions);
 
-        ];
-
-        $this->converter->pdfOptions($options);
-
-        $this->assertEquals($options, $this->converter->getPdfOptions());
+        $this->assertEquals($this->pdfOptions, $this->converter->getPdfOptions());
     }
 
     public function testImageOptions()
@@ -124,6 +130,92 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter->addPage('http://google.com');
 
         $this->assertFalse(empty($this->converter->getPages()));
+    }
+
+    public function testPushContents()
+    {
+        $pages = ['<html><body><h1>Phantom magick</h1></body></html>'];
+
+        $this->converter->pushContent($pages[0]);
+
+        $this->assertEquals($pages, $this->converter->getPages());
+    }
+
+    public function testPageBreak()
+    {
+        $pages = [
+            '<html><body><h1>Phantom magick</h1></body></html>',
+            '<div style="page-break-after:always;"><!-- page break --></div>'
+        ];
+
+        $this->converter->pushContent($pages[0]);
+
+        $this->converter->pageBreak();
+
+        $this->assertEquals($pages, $this->converter->getPages());
+    }
+
+    public function testAddPages()
+    {
+        $expected = [
+            '<html><body><h1>Page 1</h1></body></html>',
+            '<div style="page-break-after:always;"><!-- page break --></div>',
+            '<html><body><h1>Page 2</h1></body></html>',
+        ];
+
+        $pages = [
+            '<html><body><h1>Page 1</h1></body></html>',
+            '<html><body><h1>Page 2</h1></body></html>'
+        ];
+
+        $this->converter->addPages($pages);
+
+        $this->assertEquals($expected, $this->converter->getPages());
+    }
+
+    public function testToPdf()
+    {
+        $this->converter->toPdf($this->pdfOptions);
+
+        // Check pdf options is set properly
+        $this->assertEquals($this->pdfOptions, $this->converter->getPdfOptions());
+
+        // Check .pdf extension is set
+        $this->assertContains('.pdf', $this->converter->getTempFilePath());
+
+    }
+
+    public function testToPng()
+    {
+        $this->converter->toPng($this->imageOptions);
+
+        $this->assertEquals($this->imageOptions, $this->converter->getImageOptions());
+
+        // Check .png extension is set
+        $this->assertContains('.png', $this->converter->getTempFilePath());
+
+    }
+
+    public function testToJpg()
+    {
+        $this->converter->toJpg($this->imageOptions);
+
+        $this->assertEquals($this->imageOptions, $this->converter->getImageOptions());
+
+        // Check .png extension is set
+        $this->assertContains('.jpg', $this->converter->getTempFilePath());
+
+    }
+
+    public function testToGif()
+    {
+        $this->converter->toGif($this->imageOptions);
+
+        $this->assertEquals($this->imageOptions, $this->converter->getImageOptions());
+
+        // Check .png extension is set
+        $this->assertContains('.gif', $this->converter->getTempFilePath());
+
     }
 
 }
