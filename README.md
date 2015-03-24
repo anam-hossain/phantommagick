@@ -36,12 +36,36 @@ you can download PhantomJS binary from the following link:
 
 [http://phantomjs.org/download.html](http://phantomjs.org/download.html).
 
-##### 2. Using Composer
+##### 2. Install with composer
 
-The easiest way to install PhantomJS is by adding the following depencies to your composer.json
+To install with Composer, simply add the requirement to your `composer.json` file:
 
 ```json
-"required": {
-  "xyz" : 1.5.*
+{
+  "require" : {
+    "jakoch/phantomjs-installer": "1.9.8"
+  }
 }
 ```
+
+More information will be added soon.
+
+## Usage
+
+#### PDF conversion
+
+```php
+$conv = new Anam\PhantomMagick\Converter();
+$conv->source('http://code-chunk.com')
+    ->toPdf()
+    ->save('/your/destination/path/codechunk.pdf');
+```
+
+## Credits
+
+- [Anam Hossain](https://github.com/anam-hossain)
+- [All Contributors](https://github.com/anam-hossain/phantommagick/graphs/contributors)
+
+## License
+
+The MIT License (MIT). Please see [LICENSE](http://opensource.org/licenses/MIT) for more information.
