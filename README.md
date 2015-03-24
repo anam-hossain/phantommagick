@@ -1,6 +1,6 @@
 # PhantomMagick
 
-PhantomMagick provides a simple api to ease HTML to PDF or Image conversion. This package is very handy for generating Invoices and capturing website screenshot.
+PhantomMagick provides a simple api to ease HTML to PDF or Image conversion. This package is very handy for generating Invoices or capturing website screenshot.
 
 ## Features
 
@@ -12,7 +12,7 @@ PhantomMagick provides a simple api to ease HTML to PDF or Image conversion. Thi
 ## Requirements
 
 - PHP 5.4+
-- PhantomJS
+- [PhantomJS](http://phantomjs.org)
 
 ## Installation
 
@@ -24,15 +24,15 @@ $ composer require anam/phantommagick
 
 ## Dependencies
 
-[PhantomJS](http://phantomjs.org/download.html) is required to use this package.
+[PhantomJS](http://phantomjs.org/download.html) is required to install before use the PhantomMagick.
 
 #### How to install PhantomJS
 
-There are few ways to install PhantomJS:
+There are two ways to install PhantomJS:
 
 ##### 1. Using PhantomJS binary
 
-you can download PhantomJS binary from the following link:
+you can download official PhantomJS binary from the following link:
 
 [http://phantomjs.org/download.html](http://phantomjs.org/download.html).
 
@@ -59,6 +59,15 @@ $conv = new Anam\PhantomMagick\Converter();
 $conv->source('http://code-chunk.com')
     ->toPdf()
     ->save('/your/destination/path/codechunk.pdf');
+```
+
+#### Image conversion
+
+```php
+$conv = new Anam\PhantomMagick\Converter();
+$conv->source('http://code-chunk.com')
+    ->toPng()
+    ->save('/your/destination/path/codechunk.png');
 ```
 
 ## Credits
