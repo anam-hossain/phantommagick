@@ -5,7 +5,7 @@ include "vendor/autoload.php";
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v2\AwsS3Adapter;
 use League\Flysystem\Filesystem;
-use Anam\Html2PdfConverter\Converter;
+use Anam\PhantomMagick\Converter;
 use Dropbox\Client;
 use League\Flysystem\Dropbox\DropboxAdapter;
 use OpenCloud\OpenStack;
@@ -33,7 +33,7 @@ $conv->adapter($client, 'phantom-magick')
 //https://identity.api.rackspacecloud.com/v2.0/
 
 $conv = new Converter();
-$conv->source('/Applications/MAMP/htdocs/html2pdfconverter/tests/test_page.html')
+$conv->source('/Applications/MAMP/htdocs/PhantomMagick/tests/test_page.html')
     ->toPng(['width' => '1200'])
     ->save('/var/folders/k2/tp8p_jz5677bfyq904m7twl00000gn/Thello.png');
 
@@ -100,7 +100,7 @@ die(var_dump($client instanceof Aws\S3\S3Client));
 //$adapter = new AwsS3Adapter($client, $config['AWS_BUCKET']);
 //die(dump($adapter));
 
-//use Anam\Html2PdfConverter\Converter;
+//use Anam\PhantomMagick\Converter;
 
 //Converter::make('http://google.com')->toPdf();
 $conv = new Converter();

@@ -40,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Anam\\Html2PdfConverter\\" : "src/" 
+            "Anam\\PhantomMagick\\" : "src/" 
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Anam\\Html2PdfConverter\\Test\\": "tests"
+            "Anam\\PhantomMagick\\Test\\": "tests"
         }
     },
     "config": {
