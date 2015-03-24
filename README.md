@@ -65,7 +65,7 @@ More information will be added soon.
 #### PDF conversion
 
 ```php
-$conv = new Anam\PhantomMagick\Converter();
+$conv = new \Anam\PhantomMagick\Converter();
 $conv->source('http://code-chunk.com')
     ->toPdf()
     ->save('/your/destination/path/codechunk.pdf');
@@ -74,7 +74,7 @@ $conv->source('http://code-chunk.com')
 #### Image conversion
 
 ```php
-$conv = new Anam\PhantomMagick\Converter();
+$conv = new \Anam\PhantomMagick\Converter();
 $conv->source('http://code-chunk.com')
     ->toPng()
     ->save('/your/destination/path/codechunk.png');

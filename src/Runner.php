@@ -14,6 +14,13 @@ class Runner
     protected $binary = 'phantomjs';
 
     /**
+     * Executable phantomjs binary path
+     *
+     * @var string
+     */
+    protected $alternateBinary = '/bin/phantomjs';
+
+    /**
      * Constructor
      *
      * @param string $binary
@@ -35,7 +42,7 @@ class Runner
      */
     public function run($script, $source, $output, array $options = array())
     {
-        $this->verifyBinary($this->binary);
+        $this->pickBinary();
 
         $arguments = ['script' => $script, 'source' => $source, 'output' => $output] + $options;
 
@@ -62,7 +69,7 @@ class Runner
     }
 
     /**
-     * Check phantomjs exist or not
+     * Check phantomjs is installed or not
      *
      * @param  string $binary  Binary location
      * @return void
@@ -73,18 +80,44 @@ class Runner
 
         if (Str::contains($uname, 'darwin')) {
             if (! shell_exec(escapeshellcmd("which {$binary}"))) {
-                throw new Exception('Binary does not exist');
+                return false;
             }
         } elseif (Str::contains($uname, 'win')) {
             if (! shell_exec(escapeshellcmd("where {$binary}"))) {
-                throw new Exception('Binary does not exist');
+                return false;
             }
         } elseif (Str::contains($uname, 'linux')) {
             if (! shell_exec(escapeshellcmd("which {$binary}"))) {
-                throw new Exception('Binary does not exist');
+                return false;
             }
         } else {
             throw new \RuntimeException("Unknown operating system.");
+        }
+
+        return true;
+    }
+
+    /**
+     * Choose binary
+     *
+     * @return void
+     */
+    public function pickBinary()
+    {
+        if ($this->binary != 'phantomjs') {
+            if (! $this->verifyBinary($this->binary)) {
+                 throw new Exception('Binary does not exist');
+            }
+        }
+
+        if ($this->binary == 'phantomjs') {
+            if (! $this->verifyBinary($this->binary)) {
+                $this->binary = $this->$alternateBinary;
+
+                if (! $this->verifyBinary($this->binary)) {
+                     throw new Exception('Binary does not exist');
+                }
+            }
         }
     }
 }
