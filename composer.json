@@ -1,6 +1,6 @@
 {
     "name": "anam/phantommagick",
-    "description": "A simple php package for converting HTML to pdf using Phantomjs.",
+    "description": "PhantomMagick provides a simple api to ease HTML to PDF or Image conversion",
     "keywords": [
         "Pdf",
         "Html to pdf",
