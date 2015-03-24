@@ -29,6 +29,7 @@ $conv->adapter($client, 'phantom-magick')
     ->toPng(['width' => '1200'])
     ->save();
 
+dd("All good");
 //Local
 //https://identity.api.rackspacecloud.com/v2.0/
 
