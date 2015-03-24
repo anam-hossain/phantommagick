@@ -42,13 +42,13 @@ class Runner
      */
     public function run($script, $source, $output, array $options = array())
     {
-        $this->pickBinary();
+        $binary = $this->pickBinary();
 
         $arguments = ['script' => $script, 'source' => $source, 'output' => $output] + $options;
 
         $arguments = $this->escapeShellArguments($arguments);
 
-        $command = escapeshellcmd("{$this->binary} ") . implode(' ', $arguments);
+        $command = escapeshellcmd("{$binary} ") . implode(' ', $arguments);
 
         return shell_exec($command);
     }
@@ -100,7 +100,7 @@ class Runner
     /**
      * Choose binary
      *
-     * @return void
+     * @return string
      */
     public function pickBinary()
     {
@@ -108,16 +108,20 @@ class Runner
             if (! $this->verifyBinary($this->binary)) {
                  throw new Exception('Binary does not exist');
             }
+
+            return $this->binary;
         }
 
-        if ($this->binary == 'phantomjs') {
-            if (! $this->verifyBinary($this->binary)) {
-                $this->binary = $this->$alternateBinary;
 
-                if (! $this->verifyBinary($this->binary)) {
-                     throw new Exception('Binary does not exist');
-                }
+        if (! $this->verifyBinary($this->binary)) {
+
+            if (! $this->verifyBinary($this->$alternateBinary)) {
+                 throw new Exception('Binary does not exist');
             }
+
+            $this->binary = $this->$alternateBinary;
         }
+
+        return $this->binary;
     }
 }
