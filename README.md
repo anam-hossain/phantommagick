@@ -30,12 +30,14 @@ $ composer require anam/phantommagick
 
 There are few ways to install PhantomJS:
 
-**1. Using PhantomJS binary**
+##### 1. Using PhantomJS binary
+
 you can download PhantomJS binary from the following link:
 
 [http://phantomjs.org/download.html](http://phantomjs.org/download.html).
 
-**2. Using Composer**
+##### 2. Using Composer
+
 The easiest way to install PhantomJS is by adding the following depencies to your composer.json
 
 ```json
