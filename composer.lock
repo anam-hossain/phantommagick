@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fe9a4021454d4245de946ddeb3b9f829",
+    "hash": "c04f4b53c4d1b1ff04c17f770d72597d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.7.21",
+            "version": "2.7.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9dc3bb6dd6e16a7ed2f6fab73c2ee385145e26c0"
+                "reference": "a31871763cef5e2d46ad793d994a46dc700d4d55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9dc3bb6dd6e16a7ed2f6fab73c2ee385145e26c0",
-                "reference": "9dc3bb6dd6e16a7ed2f6fab73c2ee385145e26c0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a31871763cef5e2d46ad793d994a46dc700d4d55",
+                "reference": "a31871763cef5e2d46ad793d994a46dc700d4d55",
                 "shasum": ""
             },
             "require": {
@@ -71,7 +71,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2015-03-05 00:07:56"
+            "time": "2015-03-19 21:42:28"
         },
         {
             "name": "dropbox/dropbox-sdk",
@@ -114,16 +114,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.9.2",
+            "version": "v3.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle3.git",
-                "reference": "54991459675c1a2924122afbb0e5609ade581155"
+                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/54991459675c1a2924122afbb0e5609ade581155",
-                "reference": "54991459675c1a2924122afbb0e5609ade581155",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
+                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
                 "shasum": ""
             },
             "require": {
@@ -164,6 +164,9 @@
                 "zendframework/zend-cache": "2.*,<2.3",
                 "zendframework/zend-log": "2.*,<2.3"
             },
+            "suggest": {
+                "guzzlehttp/guzzle": "Guzzle 5 has moved to a new package name. The package you have installed, Guzzle 3, is deprecated."
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -191,7 +194,7 @@
                     "homepage": "https://github.com/guzzle/guzzle/contributors"
                 }
             ],
-            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
+            "description": "PHP HTTP client. This library is deprecated in favor of https://packagist.org/packages/guzzlehttp/guzzle",
             "homepage": "http://guzzlephp.org/",
             "keywords": [
                 "client",
@@ -202,7 +205,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-08-11 04:32:36"
+            "time": "2015-03-18 18:23:50"
         },
         {
             "name": "jakoch/phantomjs-installer",
@@ -247,16 +250,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "efa1d394bb45b0984a863854c608c607b9c2a9a4"
+                "reference": "51cd7cd7ee0defbaafc6ec0d3620110a5d71e11a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/efa1d394bb45b0984a863854c608c607b9c2a9a4",
-                "reference": "efa1d394bb45b0984a863854c608c607b9c2a9a4",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/51cd7cd7ee0defbaafc6ec0d3620110a5d71e11a",
+                "reference": "51cd7cd7ee0defbaafc6ec0d3620110a5d71e11a",
                 "shasum": ""
             },
             "require": {
@@ -268,21 +271,21 @@
                 "mockery/mockery": "~0.9",
                 "phpspec/phpspec": "~2.0.0",
                 "phpspec/prophecy-phpunit": "~1.0",
-                "phpunit/phpunit": "~4.0",
+                "phpunit/phpunit": "~4.1",
                 "predis/predis": "~1.0",
                 "tedivm/stash": "~0.12.0"
             },
             "suggest": {
                 "ext-fileinfo": "Required for MimeType",
-                "league/flysystem-aws-s3-v2": "Use S3 storage with AWS SDK v2",
-                "league/flysystem-aws-s3-v3": "Use S3 storage with AWS SDK v3",
+                "league/flysystem-aws-s3-v2": "Allows you to use S3 storage with AWS SDK v2",
+                "league/flysystem-aws-s3-v3": "Allows you to use S3 storage with AWS SDK v3",
                 "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
                 "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
                 "league/flysystem-copy": "Allows you to use Copy.com storage",
-                "league/flysystem-dropbox": "Use Dropbox storage",
+                "league/flysystem-dropbox": "Allows you to use Dropbox storage",
                 "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
                 "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
-                "league/flysystem-sftp": "Allows SFTP server storage via phpseclib",
+                "league/flysystem-sftp": "Allows you to use SFTP server storage via phpseclib",
                 "league/flysystem-webdav": "Allows you to use WebDAV storage",
                 "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter",
                 "predis/predis": "Allows you to use Predis for caching"
@@ -326,7 +329,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2015-01-23 09:43:34"
+            "time": "2015-03-10 11:04:14"
         },
         {
             "name": "league/flysystem-aws-s3-v2",
@@ -569,17 +572,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.6.4",
+            "version": "v2.6.5",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "f75989f3ab2743a82fe0b03ded2598a2b1546813"
+                "reference": "70f7c8478739ad21e3deef0d977b38c77f1fb284"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/f75989f3ab2743a82fe0b03ded2598a2b1546813",
-                "reference": "f75989f3ab2743a82fe0b03ded2598a2b1546813",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/70f7c8478739ad21e3deef0d977b38c77f1fb284",
+                "reference": "70f7c8478739ad21e3deef0d977b38c77f1fb284",
                 "shasum": ""
             },
             "require": {
@@ -590,6 +593,7 @@
                 "symfony/config": "~2.0,>=2.0.5",
                 "symfony/dependency-injection": "~2.6",
                 "symfony/expression-language": "~2.6",
+                "symfony/phpunit-bridge": "~2.7",
                 "symfony/stopwatch": "~2.3"
             },
             "suggest": {
@@ -623,7 +627,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-01 16:10:57"
+            "time": "2015-03-13 17:37:22"
         }
     ],
     "packages-dev": [
@@ -1599,21 +1603,24 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v2.6.4",
+            "version": "v2.6.5",
             "target-dir": "Symfony/Component/VarDumper",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "c3d5a36c3e3298bd8b070488fba5537174647353"
+                "reference": "61ee6c848fd2c623e13f59df48833f8b8bad7fda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/c3d5a36c3e3298bd8b070488fba5537174647353",
-                "reference": "c3d5a36c3e3298bd8b070488fba5537174647353",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/61ee6c848fd2c623e13f59df48833f8b8bad7fda",
+                "reference": "61ee6c848fd2c623e13f59df48833f8b8bad7fda",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
             },
             "suggest": {
                 "ext-symfony_debug": ""
@@ -1652,25 +1659,28 @@
                 "debug",
                 "dump"
             ],
-            "time": "2015-02-02 16:32:08"
+            "time": "2015-03-06 16:45:31"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.6.4",
+            "version": "v2.6.5",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8"
+                "reference": "0cd8e72071e46e15fc072270ae39ea1b66b10a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/60ed7751671113cf1ee7d7778e691642c2e9acd8",
-                "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/0cd8e72071e46e15fc072270ae39ea1b66b10a9d",
+                "reference": "0cd8e72071e46e15fc072270ae39ea1b66b10a9d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
             },
             "type": "library",
             "extra": {
@@ -1699,7 +1709,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:39:26"
+            "time": "2015-03-12 10:28:44"
         }
     ],
     "aliases": [],

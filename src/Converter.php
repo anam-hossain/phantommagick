@@ -1,11 +1,11 @@
 <?php
-namespace Anam\Html2PdfConverter;
+namespace Anam\PhantomMagick;
 
 use Exception;
 use RuntimeException;
 use InvalidArgumentException;
-use Anam\Html2PdfConverter\Exception\FileFormatNotSupportedException;
-use Anam\Html2PdfConverter\Adapter;
+use Anam\PhantomMagick\Exception\FileFormatNotSupportedException;
+use Anam\PhantomMagick\Adapter;
 use League\Flysystem\Filesystem;
 
 class Converter extends Runner

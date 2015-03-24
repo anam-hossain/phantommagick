@@ -1,10 +1,10 @@
 <?php
-namespace Anam\Html2PdfConverter\Test;
+namespace Anam\PhantomMagick\Test;
 
 use Exception;
 use RuntimeException;
 use InvalidArgumentException;
-use Anam\Html2PdfConverter\Adapter;
+use Anam\PhantomMagick\Adapter;
 
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {

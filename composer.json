@@ -1,5 +1,5 @@
 {
-    "name": "anam/html2pdf-converter",
+    "name": "anam/phantommagick",
     "description": "A simple php package for converting HTML to pdf using Phantomjs.",
     "keywords": [
         "Pdf",
@@ -14,7 +14,7 @@
         "Phantomjs",
         "Phantom"
     ],
-    "homepage": "https://github.com/anam-hossain/html2pdf-converter",
+    "homepage": "https://github.com/anam-hossain/phantommagick",
     "license": "MIT",
     "authors": [
         {

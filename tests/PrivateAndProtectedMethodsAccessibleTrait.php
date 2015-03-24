@@ -1,5 +1,5 @@
 <?php
-namespace Anam\Html2PdfConverter\Test;
+namespace Anam\PhantomMagick\Test;
 
 trait PrivateAndProtectedMethodsAccessibleTrait
 {

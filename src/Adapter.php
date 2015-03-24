@@ -1,5 +1,5 @@
 <?php
-namespace Anam\Html2PdfConverter;
+namespace Anam\PhantomMagick;
 
 use Exception;
 use InvalidArgumentException;

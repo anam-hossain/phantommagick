@@ -1,8 +1,8 @@
 <?php
-namespace Anam\Html2PdfConverter;
+namespace Anam\PhantomMagick;
 
 use Exception;
-use Anam\Html2PdfConverter\Str;
+use Anam\PhantomMagick\Str;
 
 class Runner
 {

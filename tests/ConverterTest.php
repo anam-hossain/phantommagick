@@ -1,13 +1,13 @@
 <?php
-namespace Anam\Html2PdfConverter\Test;
+namespace Anam\PhantomMagick\Test;
 
 use Exception;
 use RuntimeException;
 use Mockery;
-use Anam\Html2PdfConverter\Converter;
+use Anam\PhantomMagick\Converter;
 use League\Flysystem\Filesystem;
-use Anam\Html2PdfConverter\Adapter;
-use Anam\Html2PdfConverter\Exception\FileFormatNotSupportedException;
+use Anam\PhantomMagick\Adapter;
+use Anam\PhantomMagick\Exception\FileFormatNotSupportedException;
 use Aws\S3\S3Client;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +45,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testMake()
     {
-        $this->assertInstanceOf('Anam\Html2PdfConverter\Converter', Converter::make('http://code-chunk.com'), 'Check Converter::make() method returning the instance of \Anam\Html2PdfConverter\Converter');
+        $this->assertInstanceOf('Anam\PhantomMagick\Converter', Converter::make('http://code-chunk.com'), 'Check Converter::make() method returning the instance of \Anam\PhantomMagick\Converter');
     }
 
     public function testSetSource()
