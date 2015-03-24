@@ -1,6 +1,6 @@
 # PhantomMagick
 
-PhantomMagick provides a simple api to ease HTML to PDF or Image conversion. This package is very handy for generating Invoices or capturing website screenshot.
+PhantomMagick provides a simple api to ease HTML to PDF or HTML to Image conversion. This package is very handy for generating Invoices or capturing website screenshot.
 
 ## Features
 
@@ -8,6 +8,7 @@ PhantomMagick provides a simple api to ease HTML to PDF or Image conversion. Thi
 - Convert HTML to Image (PNG, JPG, GIF)
 - Capture a web page as a screenshot
 - Save PDF or Image to local disk or in cloud.
+- Framework-agnostic
 
 ## Requirements
 

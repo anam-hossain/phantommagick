@@ -72,7 +72,7 @@ class Runner
      * Check phantomjs is installed or not
      *
      * @param  string $binary  Binary location
-     * @return void
+     * @return boolean
      */
     public function verifyBinary($binary)
     {
