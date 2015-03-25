@@ -21,6 +21,13 @@ class Runner
     protected $alternateBinary = '/bin/phantomjs';
 
     /**
+     * Phantomjs command with arguments
+     *
+     * @var string
+     */
+    protected $command;
+
+    /**
      * Constructor
      *
      * @param string $binary
@@ -30,6 +37,27 @@ class Runner
         if ($binary !== null) {
             $this->binary = $binary;
         }
+    }
+
+    /**
+     * Set shell command
+     *
+     * @param string $command
+     * @return $this
+     **/
+    public function setCommand($command)
+    {
+        $this->command = $command;
+    }
+
+    /**
+     * Get PhantomJS shell command
+     *
+     * @return string
+     **/
+    public function getCommand()
+    {
+       return $this->command;
     }
 
     /**
@@ -48,9 +76,9 @@ class Runner
 
         $arguments = $this->escapeShellArguments($arguments);
 
-        $command = escapeshellcmd("{$binary} ") . implode(' ', $arguments);
+        $this->setCommand(escapeshellcmd("{$binary} ") . implode(' ', $arguments));
 
-        return shell_exec($command);
+        return shell_exec($this->getCommand());
     }
 
     /**

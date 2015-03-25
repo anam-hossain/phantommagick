@@ -194,8 +194,6 @@ class Converter extends Runner
      **/
     public function setBinary($binary)
     {
-        $this->verifyBinary($binary);
-
         $this->binary = $binary;
 
         return $this;
