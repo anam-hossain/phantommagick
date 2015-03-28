@@ -41,6 +41,5 @@
         "psr-4": {
             "Anam\\PhantomMagick\\Test\\": "tests"
         }
-    },
-    "bin": "bin/phantomjs"
+    }
 }

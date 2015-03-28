@@ -299,7 +299,7 @@ class Converter extends Runner
     {
         $this->pdfOptions($options);
 
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
+        $this->setTempFilePath(sys_get_temp_dir() . '/' . uniqid(rand()) . '.pdf');
 
         return $this;
     }
@@ -371,7 +371,7 @@ class Converter extends Runner
 
         $this->imageOptions($options);
 
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . self::$imageFormats[$format]);
+        $this->setTempFilePath(sys_get_temp_dir() . '/' . uniqid(rand()) . self::$imageFormats[$format]);
 
         return $this;
     }
@@ -480,7 +480,7 @@ class Converter extends Runner
      */
     protected function createTempFile()
     {
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
+        $this->setTempFilePath(sys_get_temp_dir() . '/' . uniqid(rand()) . '.html');
 
         if (! touch($this->getTempFilePath())) {
             throw new RuntimeException('Unable to create file in temp directory: '. sys_get_temp_dir());
