@@ -143,11 +143,11 @@ class Runner
 
         if (! $this->verifyBinary($this->binary)) {
 
-            if (! $this->verifyBinary($this->$alternateBinary)) {
+            if (! $this->verifyBinary($this->alternateBinary)) {
                  throw new Exception('Binary does not exist');
             }
 
-            $this->binary = $this->$alternateBinary;
+            $this->binary = $this->alternateBinary;
         }
 
         return $this->binary;
