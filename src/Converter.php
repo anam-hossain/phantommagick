@@ -129,6 +129,8 @@ class Converter extends Runner
         if ($source) {
             $this->setSource($source);
         }
+
+        parent::__construct();
     }
 
     /**

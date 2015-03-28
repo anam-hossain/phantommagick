@@ -18,7 +18,7 @@ class Runner
      *
      * @var string
      */
-    protected $alternateBinary = '/bin/phantomjs';
+    protected $alternateBinary;
 
     /**
      * Phantomjs command with arguments
@@ -37,13 +37,40 @@ class Runner
         if ($binary !== null) {
             $this->binary = $binary;
         }
+
+        if (class_exists('\Anam\PhantomLinux\Path')) {
+            $this->setAlternateBinary(\Anam\PhantomLinux\Path::binaryPath());
+        }
+    }
+
+    /**
+     * Set Alternate Binary
+     *
+     * @param string $binary
+     *
+     * @return void
+     **/
+    public function setAlternateBinary($binary)
+    {
+        $this->alternateBinary = $binary;
+    }
+
+    /**
+     * Get Alternate binary
+     *
+     * @return string
+     **/
+    public function getAlternateBinary()
+    {
+       return $this->alternateBinary;
     }
 
     /**
      * Set shell command
      *
      * @param string $command
-     * @return $this
+     *
+     * @return void
      **/
     public function setCommand($command)
     {
@@ -143,11 +170,11 @@ class Runner
 
         if (! $this->verifyBinary($this->binary)) {
 
-            if (! $this->verifyBinary($this->alternateBinary)) {
+            if (! $this->verifyBinary($this->getAlternateBinary())) {
                  throw new Exception('Binary does not exist');
             }
 
-            $this->binary = $this->alternateBinary;
+            $this->binary = $this->getAlternateBinary();
         }
 
         return $this->binary;
