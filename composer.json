@@ -42,5 +42,5 @@
             "Anam\\PhantomMagick\\Test\\": "tests"
         }
     },
-    "bin": ["bin/phantomjs"]
+    "bin": "bin/phantomjs"
 }
