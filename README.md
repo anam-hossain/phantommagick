@@ -37,29 +37,27 @@ or
 
 [PhantomJS](http://phantomjs.org/download.html) is required to install before use the PhantomMagick.
 
-#### How to install PhantomJS
-
-There are two ways to install PhantomJS:
+There are few ways to install PhantomJS:
 
 ##### 1. Using PhantomJS binary
 
-you can download official PhantomJS binary from the following link:
+You can download official PhantomJS binary from the following link:
 
 [http://phantomjs.org/download.html](http://phantomjs.org/download.html).
 
 ##### 2. Install with composer
 
-To install with Composer, simply add the requirement to your `composer.json` file:
+To install with Composer, simply add the following requirement to your `composer.json` file. 
 
 ```json
 {
   "require" : {
-    "jakoch/phantomjs-installer": "1.9.8"
+    "anam/phantomjs-linux-x86-binary": "~1.0"
   }
 }
 ```
 
-More information will be added soon.
+Note: This composer package will install PhantomJS binary for 64 bit linux systems.
 
 ## Usage
 
