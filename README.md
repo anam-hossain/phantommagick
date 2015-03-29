@@ -88,7 +88,7 @@ use Anam\PhantomMagick\Converter;
 $conv = new Converter();
 $conv->addPage('<html><body><h1>Welcome to PhantomMagick</h1></body></html>')
     ->addPage('http://facebook.com')
-    ->addPage('/html/file/from/your/local/drive/example.html')
+    ->addPage('/html/file/from/local/drive/example.html')
     ->save('/your/destination/path/multipage.pdf');
 ```
 
