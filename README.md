@@ -39,13 +39,13 @@ or
 
 There are few ways to install PhantomJS:
 
-##### 1. Using PhantomJS binary
+##### Using PhantomJS binary
 
 You can download official PhantomJS binary from the following link:
 
 [http://phantomjs.org/download.html](http://phantomjs.org/download.html).
 
-##### 2. Install with composer
+##### Install with composer
 
 To install with Composer, simply add the following requirement to your `composer.json` file. 
 
@@ -61,22 +61,44 @@ Note: This composer package will install PhantomJS binary for 64 bit linux syste
 
 ## Usage
 
-#### PDF conversion
+### PDF conversion
 
 ```php
 $conv = new \Anam\PhantomMagick\Converter();
-$conv->source('http://code-chunk.com')
+$conv->source('http://google.com')
     ->toPdf()
-    ->save('/your/destination/path/codechunk.pdf');
+    ->save('/your/destination/path/google.pdf');
 ```
 
-#### Image conversion
+###### Download file
+
+```php
+use Anam\PhantomMagick\Converter;
+
+Converter::make('http://google.com')
+    ->toPdf()
+    ->download('google.pdf');
+```
+
+###### Multipage pdf
+
+```php
+use Anam\PhantomMagick\Converter;
+
+$conv = new Converter();
+$conv->addPage('<html><body><h1>Welcome to PhantomMagick</h1></body></html>')
+    ->addPage('http://facebook.com')
+    ->addPage('/html/file/from/your/local/drive/example.html')
+    ->save('/your/destination/path/multipage.pdf');
+```
+
+### Image conversion
 
 ```php
 $conv = new \Anam\PhantomMagick\Converter();
-$conv->source('http://code-chunk.com')
+$conv->source('http://google.com')
     ->toPng()
-    ->save('/your/destination/path/codechunk.png');
+    ->save('/your/destination/path/google.png');
 ```
 
 ## Credits
