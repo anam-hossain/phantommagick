@@ -86,15 +86,6 @@ Multipage Pdf limitation:
 - Only support Absolute paths. Relative paths will be avoided.
 - Inline or Internal css is recomended.
 
-##### Download file
-
-```php
-use Anam\PhantomMagick\Converter;
-
-Converter::make('http://google.com')
-    ->toPdf()
-    ->download('google.pdf');
-```
 
 ### Image conversion
 
@@ -123,6 +114,26 @@ $conv->toJpg()
 
 ```php
 $conv->toGif()
+```
+
+### Download file
+
+```php
+use Anam\PhantomMagick\Converter;
+
+Converter::make('http://google.com')
+    ->toPdf()
+    ->download('google.pdf');
+
+Converter::make('http://yahoo.com')
+    ->toPng()
+    ->download('yahoo.png');
+```
+
+To display in the browser:
+
+```php
+$conv->download('yahoo.png', true);
 ```
 
 ## Credits
