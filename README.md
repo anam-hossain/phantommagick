@@ -70,17 +70,7 @@ $conv->source('http://google.com')
     ->save('/your/destination/path/google.pdf');
 ```
 
-###### Download file
-
-```php
-use Anam\PhantomMagick\Converter;
-
-Converter::make('http://google.com')
-    ->toPdf()
-    ->download('google.pdf');
-```
-
-###### Multipage pdf
+##### Multipage pdf
 
 ```php
 use Anam\PhantomMagick\Converter;
@@ -92,13 +82,47 @@ $conv->addPage('<html><body><h1>Welcome to PhantomMagick</h1></body></html>')
     ->save('/your/destination/path/multipage.pdf');
 ```
 
+Multipage Pdf limitation: 
+- Only support Absolute paths. Relative paths will be avoided.
+- Inline or Internal css is recomended.
+
+##### Download file
+
+```php
+use Anam\PhantomMagick\Converter;
+
+Converter::make('http://google.com')
+    ->toPdf()
+    ->download('google.pdf');
+```
+
 ### Image conversion
+
+PhantomMagick support HTML to PNG/JPG/GIF conversion.
 
 ```php
 $conv = new \Anam\PhantomMagick\Converter();
 $conv->source('http://google.com')
     ->toPng()
     ->save('/your/destination/path/google.png');
+```
+
+##### HTML to PNG
+
+```php
+$conv->toPng()
+```
+
+##### HTML to JPG
+
+```php
+$conv->toJpg()
+```
+
+##### HTML to GIF
+
+```php
+$conv->toGif()
 ```
 
 ## Credits
