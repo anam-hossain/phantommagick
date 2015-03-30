@@ -136,13 +136,35 @@ To display in the browser:
 $conv->download('google.pdf', true);
 ```
 
-### Save to cloud
+###Save to cloud
 
 PhantomMagick leverage [Flysystem](http://flysystem.thephpleague.com) to save file in cloud. 
 PhantomMagick currently support:
 - Amazon S3
 - Dropbox
 - Rackspace
+
+#####Amazon S3 example:
+
+```php
+use Anam\PhantomMagick\Converter;
+use Aws\S3\S3Client;
+use League\Flysystem\AwsS3v2\AwsS3Adapter;
+use League\Flysystem\Filesystem;
+
+$client = S3Client::factory(array(
+    'key'    => $config['AWS_KEY'],
+    'secret' => $config['AWS_SECRET'],
+    'region' => 'ap-southeast-2'
+));
+
+$conv = new Converter();
+$conv->adapter($client, 'bucket-name')
+    ->acl('public')
+    ->source('http://google.com')
+    ->toPdf()
+    ->save('google.pdf');
+```
 
 ## Credits
 
