@@ -98,19 +98,19 @@ $conv->source('http://google.com')
     ->save('/your/destination/path/google.png');
 ```
 
-##### HTML to PNG
+###### HTML to PNG
 
 ```php
 $conv->toPng()
 ```
 
-##### HTML to JPG
+###### HTML to JPG
 
 ```php
 $conv->toJpg()
 ```
 
-##### HTML to GIF
+###### HTML to GIF
 
 ```php
 $conv->toGif()
@@ -133,7 +133,7 @@ Converter::make('http://yahoo.com')
 To display in the browser:
 
 ```php
-$conv->download('yahoo.png', true);
+$conv->download('google.pdf', true);
 ```
 
 ## Credits
