@@ -82,7 +82,7 @@ $conv->addPage('<html><body><h1>Welcome to PhantomMagick</h1></body></html>')
     ->save('/your/destination/path/multipage.pdf');
 ```
 
-Multipage Pdf limitation: 
+Multipage Pdf limitations: 
 - Only support Absolute paths. Relative paths will be avoided.
 - Inline or Internal css is recomended.
 
@@ -151,8 +151,8 @@ use Anam\PhantomMagick\Converter;
 use Aws\S3\S3Client;
 
 $client = S3Client::factory(array(
-    'key'    => $config['AWS_KEY'],
-    'secret' => $config['AWS_SECRET'],
+    'key'    => 'AWS_KEY',
+    'secret' => 'AWS_SECRET',
     'region' => 'ap-southeast-2'
 ));
 
