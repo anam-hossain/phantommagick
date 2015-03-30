@@ -149,8 +149,6 @@ PhantomMagick currently support:
 ```php
 use Anam\PhantomMagick\Converter;
 use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v2\AwsS3Adapter;
-use League\Flysystem\Filesystem;
 
 $client = S3Client::factory(array(
     'key'    => $config['AWS_KEY'],
