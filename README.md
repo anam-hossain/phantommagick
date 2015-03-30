@@ -136,6 +136,14 @@ To display in the browser:
 $conv->download('google.pdf', true);
 ```
 
+### Save to cloud
+
+PhantomMagick leverage [Flysystem](http://flysystem.thephpleague.com) to save file in cloud. 
+PhantomMagick currently support:
+- Amazon S3
+- Dropbox
+- Rackspace
+
 ## Credits
 
 - [Anam Hossain](https://github.com/anam-hossain)
