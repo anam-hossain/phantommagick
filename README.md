@@ -219,6 +219,50 @@ $conv->adapter($container)
     ->save('rackspace_example.pdf');
 ```
 
+###Settings
+
+####PDF options
+
+######Format
+
+Format is optional. Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'.
+```php
+array('margin' => '1cm')
+```
+######Margin
+Margin is optional and defaults to 1cm.
+```php
+array('format' => 'A4')
+```
+######Orientation
+Orientation ('portrait', 'landscape') is optional and defaults to 'portrait'.
+```php
+array('orientation' => 'portrait')
+```
+######zoomFactor
+zoomFactor is optional and defaults to 1. i.e. 100% zoom.
+```php
+array('zoomfactor' => 1)
+```
+
+#####Example
+
+```php
+$options = [
+  'format' => 'A4',
+  'zoomfactor' => 1,
+  'orientation' => 'portrait',
+  'margin' => '1cm'
+];
+
+$conv->setPdfOptions($options);
+// or
+$conv->pdfOptions($options);
+// or
+$conv->toPdf($options);
+
+```
+
 ## Credits
 
 - [Anam Hossain](https://github.com/anam-hossain)
