@@ -144,7 +144,7 @@ PhantomMagick currently support:
 - Dropbox
 - Rackspace
 
-#####Amazon S3 example:
+#####Amazon S3
 
 ```php
 use Anam\PhantomMagick\Converter;
@@ -162,6 +162,61 @@ $conv->adapter($client, 'bucket-name')
     ->source('http://google.com')
     ->toPdf()
     ->save('google.pdf');
+```
+
+#####Dropbox
+Add the following requirements to your composer.json file.
+```json
+{
+  "require" : {
+    "dropbox/dropbox-sdk": "1.1.*",
+    "league/flysystem-dropbox": "~1.0"
+  }
+}
+```
+
+```php
+use Anam\PhantomMagick\Converter;
+use Dropbox\Client;
+
+$client = new Client('DROPBOX_TOKEN', 'DROPBOX_APP');
+
+$conv = new Converter();
+$conv->adapter($client)
+    ->source('https://google.com')
+    ->toPdf()
+    ->save('dropbox_example.pdf');
+```
+
+#####Rackspace
+Add the following requirements to your composer.json file.
+```json
+{
+  "require" : {
+    "rackspace/php-opencloud": "1.12.1",
+    "league/flysystem-rackspace": "~1.0"
+  }
+}
+```
+
+```php
+use Anam\PhantomMagick\Converter;
+use OpenCloud\OpenStack;
+use OpenCloud\Rackspace;
+
+$client = new OpenStack(Rackspace::US_IDENTITY_ENDPOINT, array(
+    'username' => 'RACKSPACE_USERNAME',
+    'password' => 'RACKSPACE_PASSWORD'
+));
+
+$store = $client->objectStoreService('cloudFiles', 'SYD');
+$container = $store->getContainer('phantom-magick');
+
+$conv = new Converter();
+$conv->adapter($container)
+    ->source('https://google.com')
+    ->toPdf()
+    ->save('rackspace_example.pdf');
 ```
 
 ## Credits
