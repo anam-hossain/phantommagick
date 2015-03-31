@@ -634,6 +634,29 @@ class Converter extends Runner
     }
 
     /**
+     * Set the PDF options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setPdfOptions(array $options)
+    {
+        $this->pdfOptions($options);
+
+        return $this;
+    }
+
+    /**
+     * Get PDF options
+     *
+     * @return $array
+     */
+    public function getPdfOptions()
+    {
+        return self::$pdfOptions;
+    }
+
+    /**
      * Update PDF settings
      *
      * @param  array  $options
@@ -658,13 +681,26 @@ class Converter extends Runner
     }
 
     /**
-     * Get PDF settings
+     * Set the Image options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setImageOptions(array $options)
+    {
+        $this->imageOptions($options);
+
+        return $this;
+    }
+
+    /**
+     * Get Image settings
      *
      * @return $array
      */
-    public function getPdfOptions()
+    public function getImageOptions()
     {
-        return self::$pdfOptions;
+        return self::$imageOptions;
     }
 
     /**
@@ -703,17 +739,6 @@ class Converter extends Runner
 
         return $this;
     }
-
-    /**
-     * Get Image settings
-     *
-     * @return $array
-     */
-    public function getImageOptions()
-    {
-        return self::$imageOptions;
-    }
-
 
     /**
      * Determine file mime
