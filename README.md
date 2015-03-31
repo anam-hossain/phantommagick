@@ -247,7 +247,7 @@ array('zoomfactor' => 1)
 ######Custom width and height
 Custom dimension is optional. Supported formats are cm, px, in.
 ```php
-array('width' => 900px, height => 700px)
+array('width' => '900px', height => '700px')
 ```
 #####Example
 
