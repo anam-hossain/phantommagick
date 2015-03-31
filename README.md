@@ -244,7 +244,11 @@ zoomFactor is optional and defaults to 1. i.e. 100% zoom.
 ```php
 array('zoomfactor' => 1)
 ```
-
+######Custom width and height
+Custom dimension is optional. Supported formats are cm, px, in.
+```php
+array('width' => 900px, height => 700px)
+```
 #####Example
 
 ```php
