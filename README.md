@@ -221,6 +221,14 @@ $conv->adapter($container)
 
 ###Settings
 
+####Global options
+######Binary
+Path or filename of the `phantomjs` shell command. Default is `phantomjs`. However, if you installed the `Phantomjs` binary using `anam/phantomjs-linux-x86-binary` package, you do not need to provide any `binary` path as PhantomMagick is smart enough to detect the binary path for you. If you installed the PhantomJS using different composer package and PhantomJS is not executable by using `phantomjs` shell command, You have to set the binary path.
+
+```php
+$conv->setBinary('/phantomjs/binary/path/phantomjs');
+```
+
 ####PDF options
 
 ######Format
