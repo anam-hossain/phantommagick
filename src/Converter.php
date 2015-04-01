@@ -839,12 +839,8 @@ class Converter extends Runner
      * Only used in Image conversion
      * @return $this
      */
-    public function quality($quality)
+    public function quality($quality = 80)
     {
-        if (! ctype_digit($quality)) {
-            throw new Exception('Quality must be a number');
-        }
-
         if (! ($quality >=1 && $quality <=100)) {
             throw new Exception('Quality must be between 1-100');
         }
