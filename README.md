@@ -266,6 +266,44 @@ $conv->pdfOptions($options);
 $conv->toPdf($options);
 
 ```
+####Image options
+
+######Width
+Width is optional and defaults to 1280px (720p) and only number is accepted.
+```php
+array('width' => 1280)
+```
+######Height
+Height is optional and only number is accepted.
+```php
+array('height' => 900)
+```
+**Note:** If only width is given full webpage will render. However, if both width and height is given, the image will be clipped to given width and height
+
+######Quality
+Quality is optional and defaults to 80. The quality must be between 1-100.
+```php
+array('quality' => 90)
+```
+
+#####Example
+
+```php
+$options = [
+  'width' => 1280,
+  'quality' => 90
+];
+
+$conv->setImageOptions($options);
+// or
+$conv->imageOptions($options);
+// or
+$conv->toPng($options);
+// or
+$conv->toJpg($options);
+// or
+$conv->toGif($options);
+```
 
 ## Credits
 
