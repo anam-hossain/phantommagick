@@ -835,6 +835,26 @@ class Converter extends Runner
     }
 
     /**
+     * Set the Image quality
+     * Only used in Image conversion
+     * @return $this
+     */
+    public function quality($quality)
+    {
+        if (! ctype_digit($quality)) {
+            throw new Exception('Quality must be a number');
+        }
+
+        if (! ($quality >=1 && $quality <=100)) {
+            throw new Exception('Quality must be between 1-100');
+        }
+
+        self::$imageOptions['quality'] = $quality;
+
+        return $this;
+    }
+
+    /**
      * Determine file mime
      *
      * @param  string $ext
