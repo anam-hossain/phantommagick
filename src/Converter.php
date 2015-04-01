@@ -795,6 +795,46 @@ class Converter extends Runner
     }
 
     /**
+     * Set the Width
+     * Only use in Image conversion
+     * @return $this
+     */
+    public function width($width)
+    {
+        if (! ctype_digit($width)) {
+            throw new Exception('Width must be a number');
+        }
+
+        $dimension = explode("*", self::$imageOptions['dimension']);
+
+        $dimension[0] = $width . 'px';
+
+        self::$imageOptions['dimension'] = implode("*", $dimension);
+
+        return $this;
+    }
+
+    /**
+     * Set the Height
+     * Only use in Image conversion
+     * @return $this
+     */
+    public function height($height)
+    {
+        if (! ctype_digit($height)) {
+            throw new Exception('Height must be a number');
+        }
+
+        $dimension = explode("*", self::$imageOptions['dimension']);
+
+        $dimension[1] = $height . 'px';
+
+        self::$imageOptions['dimension'] = implode("*", $dimension);
+
+        return $this;
+    }
+
+    /**
      * Determine file mime
      *
      * @param  string $ext
