@@ -228,6 +228,8 @@ $conv->adapter($container)
 Format is optional. Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'.
 ```php
 array('format' => 'A4')
+// or
+$conv->format('A4');
 ```
 ######Margin
 Margin is optional and defaults to 1cm.
@@ -238,6 +240,9 @@ array('margin' => '1cm')
 Orientation ('portrait', 'landscape') is optional and defaults to 'portrait'.
 ```php
 array('orientation' => 'portrait')
+// or
+$conv->portrait();
+$conv->landscape();
 ```
 ######zoomFactor
 zoomFactor is optional and defaults to 1. i.e. 100% zoom.
@@ -272,11 +277,15 @@ $conv->toPdf($options);
 Width is optional and defaults to 1280px (720p) and only number is accepted.
 ```php
 array('width' => 1280)
+//or
+$conv->width(1280);
 ```
 ######Height
 Height is optional and only number is accepted.
 ```php
 array('height' => 900)
+//or
+$conv->height(1280);
 ```
 **Note:** If only width is given full webpage will render. However, if both width and height is given, the image will be clipped to given width and height
 
@@ -284,6 +293,8 @@ array('height' => 900)
 Quality is optional and defaults to 80. The quality must be between 1-100.
 ```php
 array('quality' => 90)
+//or
+$conv->quality(90);
 ```
 
 #####Example
