@@ -227,12 +227,12 @@ $conv->adapter($container)
 
 Format is optional. Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'.
 ```php
-array('margin' => '1cm')
+array('format' => 'A4')
 ```
 ######Margin
 Margin is optional and defaults to 1cm.
 ```php
-array('format' => 'A4')
+array('margin' => '1cm')
 ```
 ######Orientation
 Orientation ('portrait', 'landscape') is optional and defaults to 'portrait'.

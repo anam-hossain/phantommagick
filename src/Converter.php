@@ -118,6 +118,21 @@ class Converter extends Runner
     ];
 
     /**
+     * Supported Paper sizes.
+     * Only use in PDF conversion
+     *
+     * @var array
+     */
+    protected static $paperSizes = [
+        'A3',
+        'A4',
+        'A5',
+        'Legal',
+        'Letter',
+        'Tabloid'
+    ];
+
+    /**
      * Initialize the Converter
      *
      * @param string  $source  source of the data file
@@ -736,6 +751,45 @@ class Converter extends Runner
 
             self::$imageOptions['dimension'] = $options['width'] . 'px';
         }
+
+        return $this;
+    }
+
+    /**
+     * Set the Paper format for PDF conversion
+     * @return $this
+     */
+    public function format($format)
+    {
+        if (! in_array($format, self::$paperSizes)) {
+            throw new Exception('Paper format not supported.');
+        }
+
+        self::$pdfOptions['format'] = $format;
+
+        return $this;
+    }
+
+    /**
+     * Set the Portrait orientation
+     * Only use in PDF conversion
+     * @return $this
+     */
+    public function portrait()
+    {
+        self::$pdfOptions['orientation'] = 'portrait';
+
+        return $this;
+    }
+
+    /**
+     * Set the Landscape orientation
+     * Only use in PDF conversion
+     * @return $this
+     */
+    public function landscape()
+    {
+        self::$pdfOptions['orientation'] = 'landscape';
 
         return $this;
     }
