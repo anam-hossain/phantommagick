@@ -143,7 +143,7 @@ To display in the browser instead of forcing the file to be download, you can pa
 $conv->download('google.pdf', true);
 ```
 
-## #Save to cloud
+## Save to cloud
 
 PhantomMagick leverages [Flysystem](http://flysystem.thephpleague.com) to save converted files in the cloud. 
 
