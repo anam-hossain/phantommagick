@@ -59,7 +59,26 @@ To install with Composer, simply add the following requirement to your `composer
 
 Note: This composer package will install PhantomJS binary for 64 bit linux systems.
 
-## Usage
+##Integrations
+
+####Laravel 4 and Laravel 5 integrations
+Although `PhantomMagick` is framework-agnostic, it support Laravel out of the box and comes with a Service provider and Facade for easy integration.
+
+After you have installed the PhantomMagick, open the `config/app.php` file which is included with Laravel and add the following lines.
+
+In the `$providers` array add the following service provider.
+
+```php
+'Anam\PhantomMagick\ConverterServiceProvider'
+```
+
+Add the facade of this package to the `$aliases` array.
+
+```php
+'Converter' => 'Anam\PhantomMagick\Facades\Converter'
+```
+
+##Usage
 
 ### PDF conversion
 
