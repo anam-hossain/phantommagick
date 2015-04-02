@@ -247,6 +247,23 @@ Path or filename of the `phantomjs` shell command. Default is `phantomjs`. Howev
 ```php
 $conv->setBinary('/phantomjs/binary/path/phantomjs');
 ```
+######Data Source
+PhantomMagick only support HTML and data can be provided via an `URL` or from `local drive`. If you need to use raw HTML data, you can use multi-page pdf conversion. However, raw data has some limitations. Firstly, it does not support relative path. Secondly, it support only inline or internal CSS.
+```php
+new Converter('/Path/to/file/example.html');
+// or
+Converter::make('/Path/to/file/example.html');
+//or
+$conv->source('/Path/to/file/example.html');
+// or
+$conv->source('http://google.com');
+```
+
+For raw HTML:
+
+```php
+$conv->addPage('<html><body><h1>Raw HTML</h1></body></html>');
+```
 
 ####PDF options
 
