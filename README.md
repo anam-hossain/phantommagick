@@ -1,14 +1,15 @@
 # PhantomMagick
 
-PhantomMagick provides a simple API to ease HTML to PDF or HTML to Image conversion. This package is very handy for generating Invoices or capturing website screenshot.
+PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images. It's especially handy for things like generating invoices or capturing screenshots of websites. It's framework agnostic but it does provide a facade for simple use in Laravel 4/5.
 
 ## Features
 
-- Convert HTML to PDF
-- Convert HTML to Image (PNG, JPG, GIF)
+- Convert HTML to a PDF
+- Convert HTML to an image (PNG, JPG or GIF)
+- Support multipage PDFs
 - Capture a web page as a screenshot
-- Save PDF or Image to local disk or in cloud.
-- Framework-agnostic
+- Save PDF or image to local disk or to the cloud (S3, Dropbox or Rackspace)
+- Framework agnostic, with optional Laravel integration
 
 ## Requirements
 
@@ -23,46 +24,32 @@ PhantomMagick is available via Composer:
 $ composer require anam/phantommagick
 ```
 
-or 
-
-```json
-{
-  "require" : {
-    "anam/phantommagick": "dev-master"
-  }
-}
-```
+*Until a stable release is available you might need to adjust the `min-stability` in your `composer.json` to install PhantomMagick.*
 
 ## Dependencies
 
-[PhantomJS](http://phantomjs.org/download.html) is required to install before use the PhantomMagick.
+[PhantomJS](http://phantomjs.org/download.html) must be installed to use PhantomMagick.
 
 There are few ways to install PhantomJS:
 
-##### Using PhantomJS binary
+##### Install binary manually
 
-You can download official PhantomJS binary from the following link:
+You can download the official PhantomJS binary from the following link:
 
 [http://phantomjs.org/download.html](http://phantomjs.org/download.html).
 
-##### Install with composer
+##### Install binary through Composer
 
-To install with Composer, simply add the following requirement to your `composer.json` file. 
+Simply pull in the `anam/phantomjs-linux-x86-binary` package to get the up-to-date PhantomJS binary for 64-bit Linux systems.
 
-```json
-{
-  "require" : {
-    "anam/phantomjs-linux-x86-binary": "~1.0"
-  }
-}
+```bash
+composer require anam/phantomjs-linux-x86-binary
 ```
 
-Note: This composer package will install PhantomJS binary for 64 bit linux systems.
+## Integrations
 
-##Integrations
-
-####Laravel 4 and Laravel 5 integrations
-Although `PhantomMagick` is framework-agnostic, it support Laravel out of the box and comes with a Service provider and Facade for easy integration.
+##### Laravel 4 and Laravel 5 integrations
+Although `PhantomMagick` is framework agnostic, it does support Laravel out of the box and comes with a Service provider and Facade for easy integration.
 
 After you have installed the PhantomMagick, open the `config/app.php` file which is included with Laravel and add the following lines.
 
@@ -78,7 +65,9 @@ Add the facade of this package to the `$aliases` array.
 'Converter' => 'Anam\PhantomMagick\Facades\Converter'
 ```
 
-##Usage
+You can now use this facade in place of instantiating the converter yourself in the following examples.
+
+## Usage
 
 ### PDF conversion
 
@@ -89,7 +78,7 @@ $conv->source('http://google.com')
     ->save('/your/destination/path/google.pdf');
 ```
 
-##### Multipage pdf
+##### Multipage PDFs
 
 ```php
 use Anam\PhantomMagick\Converter;
@@ -101,14 +90,13 @@ $conv->addPage('<html><body><h1>Welcome to PhantomMagick</h1></body></html>')
     ->save('/your/destination/path/multipage.pdf');
 ```
 
-Multipage Pdf limitations: 
-- Only support Absolute paths. Relative paths will be avoided.
-- Inline or Internal css is recomended.
-
+Please note with multipage PDFs:
+- Only absolute paths are supported, so avoid relative paths
+- Inline styles or inline style stylesheets are recommended
 
 ### Image conversion
 
-PhantomMagick support HTML to PNG/JPG/GIF conversion.
+PhantomMagick supports HTML to PNG/JPG/GIF conversion.
 
 ```php
 $conv = new \Anam\PhantomMagick\Converter();
@@ -149,21 +137,22 @@ Converter::make('http://yahoo.com')
     ->download('yahoo.png');
 ```
 
-To display in the browser:
+To display in the browser instead of forcing the file to be download, you can pass a second parameter to the method.
 
 ```php
 $conv->download('google.pdf', true);
 ```
 
-###Save to cloud
+## #Save to cloud
 
-PhantomMagick leverage [Flysystem](http://flysystem.thephpleague.com) to save file in cloud. 
-PhantomMagick currently support:
+PhantomMagick leverages [Flysystem](http://flysystem.thephpleague.com) to save converted files in the cloud. 
+
+PhantomMagick currently supports:
 - Amazon S3
 - Dropbox
 - Rackspace
 
-#####Amazon S3
+##### Amazon S3
 
 ```php
 use Anam\PhantomMagick\Converter;
@@ -183,15 +172,12 @@ $conv->adapter($client, 'bucket-name')
     ->save('google.pdf');
 ```
 
-#####Dropbox
-Add the following requirements to your composer.json file.
-```json
-{
-  "require" : {
-    "dropbox/dropbox-sdk": "1.1.*",
-    "league/flysystem-dropbox": "~1.0"
-  }
-}
+##### Dropbox
+First install the required Dropbox dependencies through Composer.
+
+```bash
+composer require dropox/dropbox-sdk
+composer require flysystem-dropbox
 ```
 
 ```php
@@ -207,15 +193,12 @@ $conv->adapter($client)
     ->save('dropbox_example.pdf');
 ```
 
-#####Rackspace
-Add the following requirements to your composer.json file.
-```json
-{
-  "require" : {
-    "rackspace/php-opencloud": "1.12.1",
-    "league/flysystem-rackspace": "~1.0"
-  }
-}
+##### Rackspace
+First intall the required Rackspace dependencies through Composer.
+
+```bash
+composer require rackspace/php-opencloud
+composer require league/flysystem-rackspace
 ```
 
 ```php
@@ -238,17 +221,18 @@ $conv->adapter($container)
     ->save('rackspace_example.pdf');
 ```
 
-###Settings
+### Settings
 
-####Global options
-######Binary
-Path or filename of the `phantomjs` shell command. Default is `phantomjs`. However, if you installed the `Phantomjs` binary using `anam/phantomjs-linux-x86-binary` package, you do not need to provide any `binary` path as PhantomMagick is smart enough to detect the binary path for you. If you installed the PhantomJS using different composer package and PhantomJS is not executable by using `phantomjs` shell command, You have to set the binary path.
+#### Global options
+###### Binary
+You can set the path of the `phantomjs` binary if you've installed it yourself manually, or the `phantomjs` command is not available in your shell. If you installed it through Composer (with the `anam/phantomjs-linux-x86-binary` package) PhantomMagick will be smart enough to find the file automatically.
 
 ```php
 $conv->setBinary('/phantomjs/binary/path/phantomjs');
 ```
-######Data Source
-PhantomMagick only support HTML and data can be provided via an `URL` or from `local drive`. If you need to use raw HTML data, you can use multi-page pdf conversion. However, raw data has some limitations. Firstly, it does not support relative path. Secondly, it support only inline or internal CSS.
+###### Data Source
+PhantomMagick only supports HTML and data can be provided via an URL or from the local disk. If you need to use raw HTML data, you can use multipage PDF conversion. However raw data does have some limitations; it does not support relative paths and it only supports inline styles and internal CSS.
+
 ```php
 new Converter('/Path/to/file/example.html');
 // or
@@ -265,36 +249,42 @@ For raw HTML:
 $conv->addPage('<html><body><h1>Raw HTML</h1></body></html>');
 ```
 
-####PDF options
+#### PDF options
 
-######Format
-
+###### Format
 Format is optional. Supported formats are: 'A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid'.
 ```php
 $conv->format('A4');
 ```
-######Margin
+###### Margin
 Margin is optional and defaults to 1cm.
+
 ```php
 array('margin' => '1cm')
 ```
-######Orientation
+
+###### Orientation
 Orientation ('portrait', 'landscape') is optional and defaults to 'portrait'.
+
 ```php
 $conv->portrait();
 $conv->landscape();
 ```
-######zoomFactor
-zoomFactor is optional and defaults to 1. i.e. 100% zoom.
+###### zoomFactor
+zoomFactor is optional and defaults to 1 (where 1 is 100% zoom).
+
 ```php
 array('zoomfactor' => 1)
 ```
-######Custom width and height
-Custom dimension is optional. Supported formats are cm, px, in.
+
+###### Custom width and height
+Custom dimension is optional. Supported formats are `cm`, `px` and `in`.
+
 ```php
 array('width' => '900px', height => '700px')
 ```
-#####Example
+
+##### Example
 
 ```php
 $options = [
@@ -311,22 +301,27 @@ $conv->pdfOptions($options);
 $conv->toPdf($options);
 
 ```
-####Image options
+#### Image options
 
-######Width
-Width is optional and defaults to 1280px (720p) and only number is accepted.
+###### Width
+Width is optional and defaults to 1280px (720p) and only intergers are accepted.
+
 ```php
 $conv->width(1280);
 ```
-######Height
-Height is optional and only number is accepted.
+
+###### Height
+Height is optional and only integers are accepted.
+
 ```php
 $conv->height(1280);
 ```
-**Note:** If only width is given full webpage will render. However, if both width and height is given, the image will be clipped to given width and height
 
-######Quality
+**Note:** If only width is given full webpage will be rendered. However, if both width and height is given the image will be clipped to the given width and height.
+
+###### Quality
 Quality is optional and defaults to 80. The quality must be between 1-100.
+
 ```php
 $conv->quality(90);
 ```
