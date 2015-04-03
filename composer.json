@@ -1,6 +1,6 @@
 {
     "name": "anam/phantommagick",
-    "description": "PhantomMagick provides a simple API to ease HTML to PDF / HTML to Image conversion",
+    "description": "PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images",
     "keywords": [
         "Pdf",
         "Html to pdf",
