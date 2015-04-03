@@ -142,6 +142,11 @@ To display in the browser instead of forcing the file to be download, you can pa
 ```php
 $conv->download('google.pdf', true);
 ```
+or just simply call:
+
+```php
+$conv->serve();
+```
 
 ## Save to cloud
 

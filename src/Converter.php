@@ -559,6 +559,16 @@ class Converter extends Runner
     }
 
     /**
+     * Download and display the file in browser
+     *
+     * @return void
+     */
+    public function serve()
+    {
+        $this->download(null, true);
+    }
+
+    /**
      * Save PDF|Image to the given file path if driver is local.
      * or Save file in cloud with provided filename
      *
