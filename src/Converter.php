@@ -118,6 +118,21 @@ class Converter extends Runner
     ];
 
     /**
+     * Supported Paper sizes.
+     * Only use in PDF conversion
+     *
+     * @var array
+     */
+    protected static $paperSizes = [
+        'A3',
+        'A4',
+        'A5',
+        'Legal',
+        'Letter',
+        'Tabloid'
+    ];
+
+    /**
      * Initialize the Converter
      *
      * @param string  $source  source of the data file
@@ -129,6 +144,8 @@ class Converter extends Runner
         if ($source) {
             $this->setSource($source);
         }
+
+        parent::__construct();
     }
 
     /**
@@ -194,8 +211,6 @@ class Converter extends Runner
      **/
     public function setBinary($binary)
     {
-        $this->verifyBinary($binary);
-
         $this->binary = $binary;
 
         return $this;
@@ -299,7 +314,7 @@ class Converter extends Runner
     {
         $this->pdfOptions($options);
 
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.pdf');
+        $this->setTempFilePath(sys_get_temp_dir() . '/' . uniqid(rand()) . '.pdf');
 
         return $this;
     }
@@ -371,7 +386,7 @@ class Converter extends Runner
 
         $this->imageOptions($options);
 
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . self::$imageFormats[$format]);
+        $this->setTempFilePath(sys_get_temp_dir() . '/' . uniqid(rand()) . self::$imageFormats[$format]);
 
         return $this;
     }
@@ -480,7 +495,7 @@ class Converter extends Runner
      */
     protected function createTempFile()
     {
-        $this->setTempFilePath(sys_get_temp_dir() . uniqid(rand()) . '.html');
+        $this->setTempFilePath(sys_get_temp_dir() . '/' . uniqid(rand()) . '.html');
 
         if (! touch($this->getTempFilePath())) {
             throw new RuntimeException('Unable to create file in temp directory: '. sys_get_temp_dir());
@@ -541,6 +556,16 @@ class Converter extends Runner
         $this->clearTempFiles();
 
         exit;
+    }
+
+    /**
+     * Download and display the file in browser
+     *
+     * @return void
+     */
+    public function serve()
+    {
+        $this->download(null, true);
     }
 
     /**
@@ -634,6 +659,29 @@ class Converter extends Runner
     }
 
     /**
+     * Set the PDF options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setPdfOptions(array $options)
+    {
+        $this->pdfOptions($options);
+
+        return $this;
+    }
+
+    /**
+     * Get PDF options
+     *
+     * @return $array
+     */
+    public function getPdfOptions()
+    {
+        return self::$pdfOptions;
+    }
+
+    /**
      * Update PDF settings
      *
      * @param  array  $options
@@ -658,13 +706,26 @@ class Converter extends Runner
     }
 
     /**
-     * Get PDF settings
+     * Set the Image options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setImageOptions(array $options)
+    {
+        $this->imageOptions($options);
+
+        return $this;
+    }
+
+    /**
+     * Get Image settings
      *
      * @return $array
      */
-    public function getPdfOptions()
+    public function getImageOptions()
     {
-        return self::$pdfOptions;
+        return self::$imageOptions;
     }
 
     /**
@@ -705,15 +766,99 @@ class Converter extends Runner
     }
 
     /**
-     * Get Image settings
-     *
-     * @return $array
+     * Set the Paper format for PDF conversion
+     * @return $this
      */
-    public function getImageOptions()
+    public function format($format)
     {
-        return self::$imageOptions;
+        if (! in_array($format, self::$paperSizes)) {
+            throw new Exception('Paper format not supported.');
+        }
+
+        self::$pdfOptions['format'] = $format;
+
+        return $this;
     }
 
+    /**
+     * Set the Portrait orientation
+     * Only use in PDF conversion
+     * @return $this
+     */
+    public function portrait()
+    {
+        self::$pdfOptions['orientation'] = 'portrait';
+
+        return $this;
+    }
+
+    /**
+     * Set the Landscape orientation
+     * Only use in PDF conversion
+     * @return $this
+     */
+    public function landscape()
+    {
+        self::$pdfOptions['orientation'] = 'landscape';
+
+        return $this;
+    }
+
+    /**
+     * Set the Width
+     * Only use in Image conversion
+     * @return $this
+     */
+    public function width($width)
+    {
+        if (! ctype_digit($width)) {
+            throw new Exception('Width must be a number');
+        }
+
+        $dimension = explode("*", self::$imageOptions['dimension']);
+
+        $dimension[0] = $width . 'px';
+
+        self::$imageOptions['dimension'] = implode("*", $dimension);
+
+        return $this;
+    }
+
+    /**
+     * Set the Height
+     * Only use in Image conversion
+     * @return $this
+     */
+    public function height($height)
+    {
+        if (! ctype_digit($height)) {
+            throw new Exception('Height must be a number');
+        }
+
+        $dimension = explode("*", self::$imageOptions['dimension']);
+
+        $dimension[1] = $height . 'px';
+
+        self::$imageOptions['dimension'] = implode("*", $dimension);
+
+        return $this;
+    }
+
+    /**
+     * Set the Image quality
+     * Only used in Image conversion
+     * @return $this
+     */
+    public function quality($quality = 80)
+    {
+        if (! ($quality >=1 && $quality <=100)) {
+            throw new Exception('Quality must be between 1-100');
+        }
+
+        self::$imageOptions['quality'] = $quality;
+
+        return $this;
+    }
 
     /**
      * Determine file mime
