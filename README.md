@@ -24,8 +24,6 @@ PhantomMagick is available via Composer:
 $ composer require anam/phantommagick
 ```
 
-*Until a stable release is available you might need to adjust the `min-stability` in your `composer.json` to install PhantomMagick.*
-
 ## Dependencies
 
 [PhantomJS](http://phantomjs.org/download.html) must be installed to use PhantomMagick.
