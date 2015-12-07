@@ -103,7 +103,7 @@ class Runner
 
         $arguments = $this->escapeShellArguments($arguments);
 
-        $this->setCommand(escapeshellcmd("{$binary} ") . implode(' ', $arguments));
+        $this->setCommand(escapeshellcmd("{$binary} --ssl-protocol=any --ignore-ssl-errors=yes ") . implode(' ', $arguments));
 
         return shell_exec($this->getCommand());
     }
