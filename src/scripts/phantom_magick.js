@@ -39,9 +39,20 @@ if (system.args.length < 3 || system.args.length > 8) {
     if (system.args.length > 4) {
         page.zoomFactor = system.args[4];
     }
+    
+    // Add better error reporting when url fails to load. 
+    page.onResourceError = function(resourceError) {
+        page.reason = resourceError.errorString;
+        page.reason_url = resourceError.url;
+    };
+    
     page.open(address, function (status) {
         if (status !== 'success') {
             console.log('Unable to load the address!');
+            console.log(
+                "Error opening url \"" + page.reason_url
+                                + "\": " + page.reason
+            );
             phantom.exit(1);
         } else {
             window.setTimeout(function () {
