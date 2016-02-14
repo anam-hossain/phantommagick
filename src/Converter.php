@@ -131,6 +131,22 @@ class Converter extends Runner
         'Letter',
         'Tabloid'
     ];
+    
+    protected  $userAgent;
+
+    /**
+     * User agents of modern browsers.
+     * @var array
+     */
+    protected static $userAgents = [
+        'chrome' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36',
+        'firefox' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:43.0) Gecko/20100101 Firefox/43.0',
+        'ie' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko',
+        'ipad' => 'Mozilla/5.0 (iPad; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3',
+        'iphone' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3',
+        'phantom' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.0 (development) Safari/534.34',
+        'safari' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'
+    ];
 
     /**
      * Initialize the Converter
@@ -669,6 +685,13 @@ class Converter extends Runner
         $this->pdfOptions($options);
 
         return $this;
+    }
+    
+    public function getUserAgent($userAgent) {
+      if(!empty($userAgent)) {
+        return self::$userAgents[$userAgent];
+      }
+      return self::$userAgents['phantom'];
     }
 
     /**

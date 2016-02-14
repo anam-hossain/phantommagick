@@ -3,6 +3,7 @@ var page = require('webpage').create(),
     quality = system.args[5] || '70',
     orientation = system.args[6] || 'portrait',
     margin = system.args[7] || '1cm',
+    userAgent = system.args[8] || 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.0 (development) Safari/534.34',
     address, output, size;
 
 if (system.args.length < 3 || system.args.length > 8) {
@@ -34,6 +35,10 @@ if (system.args.length < 3 || system.args.length > 8) {
             pageHeight = parseInt(pageWidth * 3/4, 10); // it's as good an assumption as any
             console.log ("pageHeight:",pageHeight);
             page.viewportSize = { width: pageWidth, height: pageHeight };
+        }
+        //if it's a non-pdf, then it doesn't use orientation or margin, so then useragent is lower in the arg list
+        if(typeof system.args[6] !== 'undefined') {
+          page.settings.userAgent = system.args[6];
         }
     }
     if (system.args.length > 4) {
