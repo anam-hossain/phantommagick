@@ -3,3 +3,4 @@
 /build
 /vendor
 /bin
+.DS_Store
