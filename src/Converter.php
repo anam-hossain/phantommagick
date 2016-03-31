@@ -131,13 +131,8 @@ class Converter extends Runner
         'Letter',
         'Tabloid'
     ];
-    
     protected  $userAgent;
-
-    /**
-     * User agents of modern browsers.
-     * @var array
-     */
+    
     protected static $userAgents = [
         'chrome' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36',
         'firefox' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:43.0) Gecko/20100101 Firefox/43.0',
@@ -147,6 +142,8 @@ class Converter extends Runner
         'phantom' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.0 (development) Safari/534.34',
         'safari' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'
     ];
+    
+    protected $selectors = [];
 
     /**
      * Initialize the Converter
@@ -691,7 +688,7 @@ class Converter extends Runner
       if(!empty($userAgent)) {
         return self::$userAgents[$userAgent];
       }
-      return self::$userAgents['phantom'];
+      return false;
     }
 
     /**
@@ -777,14 +774,20 @@ class Converter extends Runner
             }
 
             self::$imageOptions['dimension'] = $options['width'] . 'px' . '*' . $options['height'] . 'px';
-        } elseif (isset($options['width'])) {
+        } 
+        elseif (isset($options['width'])) {
             if (! ctype_digit($options['width'])) {
                 throw new Exception('Width must be a number');
             }
 
             self::$imageOptions['dimension'] = $options['width'] . 'px';
         }
-
+        if (isset($options['userAgent'])) {
+          self::$imageOptions['userAgent'] = $options['userAgent'];
+        }
+        if (isset($options['selectors'])) {
+          self::$imageOptions['selectors'] = $options['selectors'];
+        }
         return $this;
     }
 
