@@ -21,7 +21,7 @@ PhantomMagick provides a simple API to ease the process of converting HTML to PD
 PhantomMagick is available via Composer:
 
 ```bash
-$ composer require anam/phantommagick
+$ composer require jlillyreed/phantommagick
 ```
 
 ## Dependencies
