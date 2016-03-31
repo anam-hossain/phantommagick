@@ -76,7 +76,7 @@
           page.evaluate(function (selectors) {
             if (selectors.length > 0) {
               for (var i = 0; i < selectors.length; i++) {
-                var selector = selectors[i].split('.');
+                var selector = selectors[i].split('%');
                 var sel = "";
                 switch (selector[1]) {
                   case "id":
