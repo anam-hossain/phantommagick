@@ -14,7 +14,7 @@
     address = system.args[1];
     output = system.args[2];
     page.viewportSize = { width: 1280, height: 720 };
-    this.selectors = [];
+    page.selectors = [];
     /* END REQUIRED FIELDS */
 
     if (system.args.length > 3 && system.args[2].substr(-4) === ".pdf") {
