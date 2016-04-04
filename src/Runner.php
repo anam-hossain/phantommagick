@@ -138,7 +138,7 @@ class Runner
                 return false;
             }
         } elseif (Str::contains($uname, 'win')) {
-            if (! shell_exec(escapeshellcmd("where {$binary}"))) {
+            if (! shell_exec(escapeshellcmd("{$binary}"))) {
                 return false;
             }
         } elseif (Str::contains($uname, 'linux')) {
