@@ -77,16 +77,16 @@
             if (selectors.length > 0) {
               for (var i = 0; i < selectors.length; i++) {
                 var selector = selectors[i].split('%');
-                var sel = "";
-                switch (selector[1]) {
-                  case "id":
-                    sel = "#" + selector[2];
+                var sel = selector[1];
+                switch(selector[0]) {
+                  case "hide":
+                    $("head").append("<style type='text/css'>" + sel + " { display: none !important; }</style>");
                     break;
-                  case "c":
-                    sel = "." + selector[2];
+                  case "click":
+                    $(selector[1]).click();
                     break;
                 }
-                $("head").append("<style type='text/css'>" + sel + " { display: none !important; }</style>");
+                
               }
             }
             ;
