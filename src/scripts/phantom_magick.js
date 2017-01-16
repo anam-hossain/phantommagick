@@ -2,7 +2,7 @@ var page = require('webpage').create(),
     system = require('system'),
     quality = system.args[5] || '70',
     orientation = system.args[6] || 'portrait',
-    margin = system.args[7] || '1cm',
+    margin = getMargin(system.args[7]) || '1cm',
     address, output, size;
 
 if (system.args.length < 3 || system.args.length > 8) {
@@ -61,4 +61,14 @@ if (system.args.length < 3 || system.args.length > 8) {
             }, 200);
         }
     });
+}
+
+function getMargin(str) {
+    var margins;
+    try {
+        margins = JSON.parse(str);
+    } catch (e) {
+        return str;
+    }
+    return margins;
 }
