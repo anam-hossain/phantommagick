@@ -161,7 +161,7 @@ class Runner
     {
         if ($this->binary != 'phantomjs') {
             if (! $this->verifyBinary($this->binary)) {
-                 throw new Exception('Binary does not exist');
+                throw new Exception('Binary does not exist');
             }
 
             return $this->binary;
@@ -171,7 +171,7 @@ class Runner
         if (! $this->verifyBinary($this->binary)) {
 
             if (! $this->verifyBinary($this->getAlternateBinary())) {
-                 throw new Exception('Binary does not exist');
+                throw new Exception('Binary does not exist');
             }
 
             $this->binary = $this->getAlternateBinary();
