@@ -159,7 +159,7 @@ PhantomMagick currently supports:
 
 ##### Amazon S3
 
-First intall the required S3 dependencies through Composer.
+First install the required S3 dependencies through Composer.
 
 ```bash
 composer require aws/aws-sdk-php
@@ -209,7 +209,7 @@ $conv->adapter($client)
 ```
 
 ##### Rackspace
-First intall the required Rackspace dependencies through Composer.
+First install the required Rackspace dependencies through Composer.
 
 ```bash
 composer require rackspace/php-opencloud
