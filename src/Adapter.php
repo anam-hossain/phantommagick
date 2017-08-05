@@ -33,7 +33,7 @@ class Adapter
      * @param mixed $client
      * @param array  $args
      */
-    public function __construct($client, array $args = array())
+    public function __construct($client, array $args = [])
     {
         $this->client = $client;
         $this->args = $args;
