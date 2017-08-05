@@ -170,14 +170,17 @@ composer require league/flysystem-aws-s3-v3
 use Anam\PhantomMagick\Converter;
 use Aws\S3\S3Client;
 
-$client = S3Client::factory(array(
-    'key'    => 'AWS_KEY',
-    'secret' => 'AWS_SECRET',
-    'region' => 'ap-southeast-2'
-));
+$client = S3Client::factory([
+    'credentials' => [
+        'key'    => 'AWS_KEY',
+        'secret' => 'AWS_SECRET',
+    ],
+    'region' => 'your-region',
+    'version' => 'latest',
+]);
 
 $conv = new Converter();
-$conv->adapter($client, 'bucket-name')
+$conv->adapter($client, 'bucket-name', 'optional/path/prefix')
     ->acl('public')
     ->source('http://google.com')
     ->toPdf()
