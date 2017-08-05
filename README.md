@@ -15,7 +15,7 @@ PhantomMagick provides a simple API to ease the process of converting HTML to PD
 
 ## Requirements
 
-- PHP 5.4+
+- PHP 5.5+
 - [PhantomJS](http://phantomjs.org)
 
 ## Installation
