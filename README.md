@@ -157,6 +157,13 @@ PhantomMagick currently supports:
 
 ##### Amazon S3
 
+First intall the required S3 dependencies through Composer.
+
+```bash
+composer require aws/aws-sdk-php
+composer require league/flysystem-aws-s3-v3
+```
+
 ```php
 use Anam\PhantomMagick\Converter;
 use Aws\S3\S3Client;
