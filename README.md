@@ -1,5 +1,7 @@
 # PhantomMagick
 
+### For PhantomMagick version 1, please use the [1.0.2 branch](https://github.com/anam-hossain/phantommagick/tree/1.0.2)!
+
 PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images. It's especially handy for things like generating invoices or capturing screenshots of websites. It's framework agnostic but it does provide a facade for simple use in Laravel 4/5.
 
 ## Features
