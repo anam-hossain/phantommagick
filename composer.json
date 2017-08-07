@@ -28,9 +28,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "league/flysystem": "~1.0",
-        "aws/aws-sdk-php": "~2.0",
-        "league/flysystem-aws-s3-v2": "~1.0"
+        "league/flysystem": "~1.0"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
