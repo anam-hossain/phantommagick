@@ -1,6 +1,6 @@
 {
-    "name": "anam/phantommagick",
-    "description": "PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images",
+    "name": "jlillyreed/phantommagick",
+    "description": "a fork of anam/phantommagick, increasing the functionality that the base library provided",
     "keywords": [
         "Pdf",
         "Html to pdf",
@@ -18,12 +18,16 @@
         "converter",
         "Phantom"
     ],
-    "homepage": "https://github.com/anam-hossain/phantommagick",
+    "homepage": "https://github.com/jlillyreed/phantommagick",
     "license": "MIT",
     "authors": [
         {
             "name": "Anam hossain",
             "email": "enam33@gmail.com"
+        },
+        {
+            "name": "Jamil Lillyreed",
+            "email": "jlillyreed@gmail.com"
         }
     ],
     "require": {
