@@ -693,6 +693,10 @@ class Converter extends Runner
             if (isset(self::$pdfOptions[$key])) {
                 self::$pdfOptions[$key] = $option;
             }
+
+            if ($key === 'footer') {
+                self::$pdfOptions[$key] = $option;
+            }
         }
 
         // Custom paper width and height will replace the default format.
