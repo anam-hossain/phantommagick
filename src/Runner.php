@@ -134,7 +134,7 @@ class Runner
         $uname = strtolower(php_uname());
 
         if (Str::contains($uname, 'darwin')) {
-            if (! shell_exec(escapeshellcmd("which {$binary}"))) {
+            if (! shell_exec(escapeshellcmd("command -v {$binary} >/dev/null 2>&1"))) {
                 return false;
             }
         } elseif (Str::contains($uname, 'win')) {
@@ -161,7 +161,7 @@ class Runner
     {
         if ($this->binary != 'phantomjs') {
             if (! $this->verifyBinary($this->binary)) {
-                 throw new Exception('Binary does not exist');
+                throw new Exception('Binary does not exist');
             }
 
             return $this->binary;
@@ -171,7 +171,7 @@ class Runner
         if (! $this->verifyBinary($this->binary)) {
 
             if (! $this->verifyBinary($this->getAlternateBinary())) {
-                 throw new Exception('Binary does not exist');
+                throw new Exception('Binary does not exist');
             }
 
             $this->binary = $this->getAlternateBinary();

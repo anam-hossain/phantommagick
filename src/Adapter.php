@@ -33,7 +33,7 @@ class Adapter
      * @param mixed $client
      * @param array  $args
      */
-    public function __construct($client, array $args = array())
+    public function __construct($client, array $args = [])
     {
         $this->client = $client;
         $this->args = $args;
@@ -95,31 +95,19 @@ class Adapter
      */
     public function s3()
     {
-        $options = [
-            // Amazon S3 api version
-            'version'   => 2,
-            'prefix'    => null
-        ];
+        $pathPrefix = '';
 
         if (! isset($this->args[0])) {
             throw new InvalidArgumentException('S3 Bucket name is required');
         }
 
-        if (isset($this->args[1])) {
-            if (! is_array($this->args[1])) {
-                throw new InvalidArgumentException('Options must be an array');
-            }
-
-            $options = array_merge($options, $this->args[1]);
-        }
-
         $bucket = $this->args[0];
 
-        if ($options['version'] >= 3 || $options['version'] == 'latest') {
-            return new \League\Flysystem\AwsS3v3\AwsS3Adapter($this->client, $bucket, $options['prefix']);
+        if (isset($this->args[1]) && $this->args[1]) {
+            $pathPrefix = $this->args[1];
         }
 
-        return new \League\Flysystem\AwsS3v2\AwsS3Adapter($this->client, $bucket, $options['prefix']);
+        return new \League\Flysystem\AwsS3v3\AwsS3Adapter($this->client, $bucket, $pathPrefix);
     }
 
     /**

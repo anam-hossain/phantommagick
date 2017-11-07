@@ -1,5 +1,7 @@
 # PhantomMagick
 
+### For PhantomMagick version 1, please use the [1.0.2 branch](https://github.com/anam-hossain/phantommagick/tree/1.0.2)!
+
 PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images. It's especially handy for things like generating invoices or capturing screenshots of websites. It's framework agnostic but it does provide a facade for simple use in Laravel 4/5.
 
 ## Features
@@ -13,7 +15,7 @@ PhantomMagick provides a simple API to ease the process of converting HTML to PD
 
 ## Requirements
 
-- PHP 5.4+
+- PHP 5.5+
 - [PhantomJS](http://phantomjs.org)
 
 ## Installation
@@ -157,18 +159,28 @@ PhantomMagick currently supports:
 
 ##### Amazon S3
 
+First install the required S3 dependencies through Composer.
+
+```bash
+composer require aws/aws-sdk-php
+composer require league/flysystem-aws-s3-v3
+```
+
 ```php
 use Anam\PhantomMagick\Converter;
 use Aws\S3\S3Client;
 
-$client = S3Client::factory(array(
-    'key'    => 'AWS_KEY',
-    'secret' => 'AWS_SECRET',
-    'region' => 'ap-southeast-2'
-));
+$client = S3Client::factory([
+    'credentials' => [
+        'key'    => 'AWS_KEY',
+        'secret' => 'AWS_SECRET',
+    ],
+    'region' => 'your-region',
+    'version' => 'latest',
+]);
 
 $conv = new Converter();
-$conv->adapter($client, 'bucket-name')
+$conv->adapter($client, 'bucket-name', 'optional/path/prefix')
     ->acl('public')
     ->source('http://google.com')
     ->toPdf()
@@ -197,7 +209,7 @@ $conv->adapter($client)
 ```
 
 ##### Rackspace
-First intall the required Rackspace dependencies through Composer.
+First install the required Rackspace dependencies through Composer.
 
 ```bash
 composer require rackspace/php-opencloud

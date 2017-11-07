@@ -310,7 +310,7 @@ class Converter extends Runner
      * @param  array  $options PDF settings
      * @return $this
      */
-    public function toPdf(array $options = array())
+    public function toPdf(array $options = [])
     {
         $this->pdfOptions($options);
 
@@ -325,7 +325,7 @@ class Converter extends Runner
      * @param  array  $options Image settings
      * @return $this
      */
-    public function toPng(array $options = array())
+    public function toPng(array $options = [])
     {
         return $this->prepareImage($options, $format = 'png');
     }
@@ -336,7 +336,7 @@ class Converter extends Runner
      * @param  array  $options Image settings
      * @return $this
      */
-    public function toJpg(array $options = array())
+    public function toJpg(array $options = [])
     {
         return $this->prepareImage($options, $format = 'jpg');
     }
@@ -347,7 +347,7 @@ class Converter extends Runner
      * @param  array  $options Image settings
      * @return $this
      */
-    public function toGif(array $options = array())
+    public function toGif(array $options = [])
     {
         return $this->prepareImage($options, $format = 'gif');
     }
@@ -691,6 +691,10 @@ class Converter extends Runner
     {
         foreach ($options as $key => $option) {
             if (isset(self::$pdfOptions[$key])) {
+                self::$pdfOptions[$key] = $option;
+            }
+
+            if ($key === 'footer') {
                 self::$pdfOptions[$key] = $option;
             }
         }
