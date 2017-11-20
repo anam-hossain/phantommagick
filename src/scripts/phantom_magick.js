@@ -2,11 +2,11 @@ var page = require('webpage').create(),
     system = require('system'),
     quality = system.args[5] || '70',
     orientation = system.args[6] || 'portrait',
-    margin = system.args[7] || '1cm',
+    margin = getMargin(system.args[7]) || '1cm',
     address, output, size;
 
-if (system.args.length < 3 || system.args.length > 8) {
-    console.log('Usage: rasterize.js URL filename [paperwidth*paperheight|paperformat] [zoom] [orientation] [margin] [quality]');
+if (system.args.length < 3 || system.args.length > 9) {
+    console.log('Usage: rasterize.js URL filename [paperwidth*paperheight|paperformat] [zoom] [orientation] [margin] [quality] [footer]');
     console.log('  paper (pdf output) examples: "5in*7.5in", "10cm*20cm", "A4", "Letter"');
     console.log('  image (png/jpg output) examples: "1920px" entire page, window width 1920px');
     console.log('                                   "800px*600px" window, clipped to 800x600');
@@ -17,8 +17,37 @@ if (system.args.length < 3 || system.args.length > 8) {
     page.viewportSize = { width: 1280, height: 720 };
     if (system.args.length > 3 && system.args[2].substr(-4) === ".pdf") {
         size = system.args[3].split('*');
-        page.paperSize = size.length === 2 ? { width: size[0], height: size[1], margin: margin }
-                                           : { format: system.args[3], orientation: orientation, margin: margin };
+        if (size.length === 2) {
+            page.paperSize = { width: size[0], height: size[1], margin: margin };
+        } else {
+            var paperSize = { format: system.args[3], orientation: orientation, margin: margin };
+
+            // footer
+            if (system.args[8] !== undefined) {
+                var footerSettings = JSON.parse(system.args[8]);
+                if (footerSettings !== undefined) {
+                    try {
+                        var fs = require('fs');
+                        var footerTemplate1 = footerSettings.template1 !== undefined && footerSettings.template1 !== '' ? fs.read(footerSettings.template1) : '';
+                        var footerTemplate2 = footerSettings.template2 !== undefined && footerSettings.template2 !== '' ? fs.read(footerSettings.template2) : '';
+                        var footerHeight = footerSettings.height || '1cm';
+
+                        paperSize.footer = {
+                            height: footerHeight,
+                            contents: phantom.callback(function (pageNum, numPages) {
+                                if (pageNum == 1) {
+                                    return footerTemplate1.replace('{{pageNum}}', pageNum).replace('{{numPages}}', numPages);
+                                }
+                                return footerTemplate2.replace('{{pageNum}}', pageNum).replace('{{numPages}}', numPages);
+                            })
+                        };
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+            page.paperSize = paperSize;
+        }
     } else if (system.args.length > 3 && system.args[3].substr(-2) === "px") {
         size = system.args[3].split('*');
         if (size.length === 2) {
@@ -61,4 +90,14 @@ if (system.args.length < 3 || system.args.length > 8) {
             }, 200);
         }
     });
+}
+
+function getMargin(str) {
+    var margins;
+    try {
+        margins = JSON.parse(str);
+    } catch (e) {
+        return str;
+    }
+    return margins;
 }
