@@ -106,6 +106,8 @@ class Converter extends Runner
         'quality'       => '80'
     ];
 
+    protected static $timeout = 200;
+
     /**
      * Supported image formats
      *
@@ -611,16 +613,16 @@ class Converter extends Runner
                 $this->put(implode('', $this->pages));
             }
 
-            return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $filename, self::$pdfOptions);
+            return $this->run(self::$scripts['converter'], $this->getTempFilePath(), $filename, self::$pdfOptions, self::$timeout);
         }
 
         // Single page pdf
         if (self::$format === 'pdf') {
-            return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$pdfOptions);
+            return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$pdfOptions, self::$timeout);
         }
 
         // Image
-        return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$imageOptions);
+        return $this->run(self::$scripts['converter'], $this->getSource(), $filename, self::$imageOptions, self::$timeout);
     }
 
     /**
@@ -641,12 +643,12 @@ class Converter extends Runner
 
             $tempFilename = dirname($this->getTempFilePath()) . "/" . basename($this->getTempFilePath(), ".html") . ".pdf";
 
-            $this->run(self::$scripts['converter'], $this->getTempFilePath(), $tempFilename, self::$pdfOptions);
+            $this->run(self::$scripts['converter'], $this->getTempFilePath(), $tempFilename, self::$pdfOptions, self::$timeout);
 
         } elseif (self::$format === 'pdf') {
-            $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$pdfOptions);
+            $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$pdfOptions, self::$timeout);
         } else {
-            $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$imageOptions);
+            $this->run(self::$scripts['converter'], $this->getSource(), $tempFilename, self::$imageOptions, self::$timeout);
         }
 
         if (file_exists($tempFilename)) {
@@ -701,6 +703,22 @@ class Converter extends Runner
             // note: without unit (i.e 900*600) will use px.
             self::$pdfOptions['format'] = $options['width'] . '*' . $options['height'];
         }
+
+        return $this;
+    }
+
+    /**
+     * Set the timeout before page render
+     *
+     * @param int $ms
+     * @return $this
+     */
+    public function setTimeOut($ms)
+    {
+        if (! ctype_digit($ms)) {
+            throw new Exception('Timeout must be a number');
+        }
+        self::$timeout = $ms;
 
         return $this;
     }

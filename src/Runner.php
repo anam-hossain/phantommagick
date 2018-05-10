@@ -95,11 +95,11 @@ class Runner
      * @param  array  $options
      * @return string
      */
-    public function run($script, $source, $output, array $options = array())
+    public function run($script, $source, $output, array $options = array(), $timeout = 200)
     {
         $binary = $this->pickBinary();
 
-        $arguments = ['script' => $script, 'source' => $source, 'output' => $output] + $options;
+        $arguments = ['script' => $script, 'source' => $source, 'timeout' => $timeout, 'output' => $output] + $options;
 
         $arguments = $this->escapeShellArguments($arguments);
 
