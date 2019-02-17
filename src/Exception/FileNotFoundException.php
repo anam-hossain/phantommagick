@@ -1,6 +1,6 @@
 <?php
 
-namespace Anam\Html2PdfConverter\Exception;
+namespace iBrand\PhantomMagick\Exception;
 
 use Exception;
 

@@ -1,9 +1,13 @@
 <?php
-namespace Anam\PhantomMagick\Facades;
+
+namespace iBrand\PhantomMagick\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 class Converter extends Facade
 {
-    protected static function getFacadeAccessor() { return 'converter'; }
+	protected static function getFacadeAccessor()
+	{
+		return 'converter';
+	}
 }

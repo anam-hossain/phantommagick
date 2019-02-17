@@ -1,47 +1,63 @@
 {
-    "name": "anam/phantommagick",
-    "description": "PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images",
-    "keywords": [
-        "Pdf",
-        "Html to pdf",
-        "html to image",
-        "Html 2 pdf",
-        "Html 2 jpg",
-        "html to png",
-        "Screen capture",
-        "invoice",
-        "Laravel pdf",
-        "Laravel",
-        "Phantomjs",
-        "pdf converter",
-        "image converter",
-        "converter",
-        "Phantom"
-    ],
-    "homepage": "https://github.com/anam-hossain/phantommagick",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Anam hossain",
-            "email": "enam33@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0",
-        "league/flysystem": "~1.0"
-    },
-    "require-dev": {
-        "mockery/mockery": "~0.9",
-        "phpunit/phpunit": "~4.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "Anam\\PhantomMagick\\" : "src/" 
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Anam\\PhantomMagick\\Test\\": "tests"
-        }
-    }
+	"name": "ibrand/phantommagick",
+	"description": "PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images",
+	"keywords": [
+		"Pdf",
+		"Html to pdf",
+		"html to image",
+		"Html 2 pdf",
+		"Html 2 jpg",
+		"html to png",
+		"Screen capture",
+		"invoice",
+		"Laravel pdf",
+		"Laravel",
+		"Phantomjs",
+		"pdf converter",
+		"image converter",
+		"converter",
+		"Phantom"
+	],
+	"homepage": "https://github.com/anam-hossain/phantommagick",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Anam hossain",
+			"email": "enam33@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=7.0",
+		"league/flysystem": "~1.0",
+		"anam/phantomjs-linux-x86-binary": "^2.1",
+		"aws/aws-sdk-php": "^3.87",
+		"league/flysystem-aws-s3-v3": "^1.0",
+		"rackspace/php-opencloud": "^1.16",
+		"league/flysystem-rackspace": "^1.0",
+		"overtrue/flysystem-qiniu": "^1.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~6.0",
+		"orchestra/testbench": "~3.5",
+		"mockery/mockery": "~0.9"
+	},
+	"autoload": {
+		"psr-4": {
+			"iBrand\\PhantomMagick\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"iBrand\\PhantomMagick\\Test\\": "tests"
+		}
+	},
+	"extra": {
+		"laravel": {
+			"providers": [
+				"iBrand\\PhantomMagick\\ConverterServiceProvider"
+			]
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

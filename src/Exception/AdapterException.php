@@ -4,7 +4,7 @@ namespace iBrand\PhantomMagick\Exception;
 
 use Exception;
 
-class FileFormatNotSupportedException extends Exception
+class AdapterException extends Exception
 {
-
+	
 }

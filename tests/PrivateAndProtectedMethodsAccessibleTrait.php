@@ -1,5 +1,5 @@
 <?php
-namespace Anam\PhantomMagick\Test;
+namespace iBrand\PhantomMagick\Test;
 
 trait PrivateAndProtectedMethodsAccessibleTrait
 {
