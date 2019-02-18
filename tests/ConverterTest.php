@@ -81,6 +81,21 @@ class ConverterTest extends BaseTest
 		$this->assertEquals('qiniu', $this->converter->getDriver());
 	}
 
+	/** @test */
+	public function TestSaveToCloudQiniu()
+	{
+		$url     = 'https://www.ibrand.cc/';
+		$options = [
+			'dimension'  => '575px',
+			'zoomfactor' => 1.5,
+			'quality'    => 100,
+		];
+		$file    = 'default' . '/' . date('Ymd') . '/' . md5(uniqid()) . '.png';
+
+		$result = $this->converter->adapter('qiniu')->source($url)->toPng($options)->save($file);
+		$this->assertTrue($result);
+	}
+
 	/**
 	 * @test
 	 * @expectedException \iBrand\PhantomMagick\Exception\AdapterException
