@@ -1,6 +1,6 @@
 <?php
 
-namespace iBrand\PhantomMagick\Adapters;
+namespace Anam\PhantomMagick\Adapters;
 
 class QiniuAdapter extends BaseAdapter
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace iBrand\PhantomMagick\Adapters;
+namespace Anam\PhantomMagick\Adapters;
 
-use iBrand\PhantomMagick\Contracts\AdapterContract;
+use Anam\PhantomMagick\Contracts\AdapterContract;
 
 abstract class BaseAdapter implements AdapterContract
 {

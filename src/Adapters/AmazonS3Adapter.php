@@ -1,6 +1,6 @@
 <?php
 
-namespace iBrand\PhantomMagick\Adapters;
+namespace Anam\PhantomMagick\Adapters;
 
 use Aws\S3\S3Client;
 use Aws\Credentials\Credentials;

@@ -1,6 +1,6 @@
 <?php
 
-namespace iBrand\PhantomMagick\Facades;
+namespace Anam\PhantomMagick\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace iBrand\PhantomMagick\Exception;
+namespace Anam\PhantomMagick\Exception;
 
 use Exception;
 

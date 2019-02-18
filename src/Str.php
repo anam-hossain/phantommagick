@@ -1,6 +1,6 @@
 <?php
 
-namespace iBrand\PhantomMagick;
+namespace Anam\PhantomMagick;
 
 class Str
 {

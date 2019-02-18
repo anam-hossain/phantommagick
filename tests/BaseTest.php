@@ -1,8 +1,8 @@
 <?php
 
-namespace iBrand\PhantomMagick\Test;
+namespace Anam\PhantomMagick\Test;
 
-use iBrand\PhantomMagick\Converter;
+use Anam\PhantomMagick\Converter;
 use Orchestra\Testbench\TestCase;
 
 abstract class BaseTest extends TestCase
@@ -30,7 +30,7 @@ abstract class BaseTest extends TestCase
 	protected function getPackageProviders($app)
 	{
 		return [
-			\iBrand\PhantomMagick\ConverterServiceProvider::class,
+			\Anam\PhantomMagick\ConverterServiceProvider::class,
 		];
 	}
 }

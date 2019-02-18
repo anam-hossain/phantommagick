@@ -1,9 +1,9 @@
 <?php
 
-namespace iBrand\PhantomMagick;
+namespace Anam\PhantomMagick;
 
-use iBrand\PhantomMagick\Adapters\AmazonS3Adapter;
-use iBrand\PhantomMagick\Adapters\QiniuAdapter;
+use Anam\PhantomMagick\Adapters\AmazonS3Adapter;
+use Anam\PhantomMagick\Adapters\QiniuAdapter;
 use Illuminate\Support\ServiceProvider;
 
 class ConverterServiceProvider extends ServiceProvider
@@ -22,7 +22,7 @@ class ConverterServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind('converter', function () {
-			return new \iBrand\PhantomMagick\Converter;
+			return new \Anam\PhantomMagick\Converter;
 		});
 
 		$this->app->alias(AmazonS3Adapter::class, AmazonS3Adapter::DRIVER);

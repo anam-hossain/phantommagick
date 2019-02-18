@@ -1,5 +1,5 @@
 {
-	"name": "ibrand/phantommagick",
+	"name": "anam/phantommagick",
 	"description": "PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images",
 	"keywords": [
 		"Pdf",
@@ -29,7 +29,7 @@
 	"require": {
 		"php": ">=7.0",
 		"league/flysystem": "~1.0",
-		"anam/phantomjs-linux-x86-binary": "^2.1",
+		"anam/phantomjs-linux-x86-binary": "~2.1.1",
 		"aws/aws-sdk-php": "^3.87",
 		"league/flysystem-aws-s3-v3": "^1.0",
 		"overtrue/flysystem-qiniu": "^1.0"
@@ -41,18 +41,18 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"iBrand\\PhantomMagick\\": "src/"
+			"Anam\\PhantomMagick\\": "src/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"iBrand\\PhantomMagick\\Test\\": "tests"
+			"Anam\\PhantomMagick\\Test\\": "tests"
 		}
 	},
 	"extra": {
 		"laravel": {
 			"providers": [
-				"iBrand\\PhantomMagick\\ConverterServiceProvider"
+				"Anam\\PhantomMagick\\ConverterServiceProvider"
 			]
 		}
 	},

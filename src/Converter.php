@@ -1,12 +1,12 @@
 <?php
 
-namespace iBrand\PhantomMagick;
+namespace Anam\PhantomMagick;
 
-use iBrand\PhantomMagick\Exception\AdapterException;
+use Anam\PhantomMagick\Exception\AdapterException;
 use Exception;
 use RuntimeException;
 use InvalidArgumentException;
-use iBrand\PhantomMagick\Exception\FileFormatNotSupportedException;
+use Anam\PhantomMagick\Exception\FileFormatNotSupportedException;
 use League\Flysystem\Filesystem;
 
 class Converter extends Runner
@@ -175,7 +175,7 @@ class Converter extends Runner
 	 * @param $adapter
 	 *
 	 * @return $this
-	 * @throws \iBrand\PhantomMagick\Exception\AdapterException
+	 * @throws \Anam\PhantomMagick\Exception\AdapterException
 	 */
 	public function adapter($adapter)
 	{
@@ -751,11 +751,11 @@ class Converter extends Runner
 	/**
 	 * Update image settings
 	 *
-	 * @param  array $options
+	 * @param array $options
 	 *
 	 * @return $this
+	 * @throws \Exception
 	 */
-
 	public function imageOptions(array $options)
 	{
 		foreach ($options as $key => $option) {
@@ -789,7 +789,10 @@ class Converter extends Runner
 	/**
 	 * Set the Paper format for PDF conversion
 	 *
+	 * @param $format
+	 *
 	 * @return $this
+	 * @throws \Exception
 	 */
 	public function format($format)
 	{
@@ -832,7 +835,10 @@ class Converter extends Runner
 	 * Set the Width
 	 * Only use in Image conversion
 	 *
+	 * @param $width
+	 *
 	 * @return $this
+	 * @throws \Exception
 	 */
 	public function width($width)
 	{
@@ -853,7 +859,10 @@ class Converter extends Runner
 	 * Set the Height
 	 * Only use in Image conversion
 	 *
+	 * @param $height
+	 *
 	 * @return $this
+	 * @throws \Exception
 	 */
 	public function height($height)
 	{
@@ -874,7 +883,10 @@ class Converter extends Runner
 	 * Set the Image quality
 	 * Only used in Image conversion
 	 *
+	 * @param int $quality
+	 *
 	 * @return $this
+	 * @throws \Exception
 	 */
 	public function quality($quality = 80)
 	{

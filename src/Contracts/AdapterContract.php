@@ -1,6 +1,6 @@
 <?php
 
-namespace iBrand\PhantomMagick\Contracts;
+namespace Anam\PhantomMagick\Contracts;
 
 interface AdapterContract
 {

@@ -1,9 +1,8 @@
 <?php
 
-namespace iBrand\PhantomMagick\Test;
+namespace Anam\PhantomMagick\Test;
 
-use iBrand\PhantomMagick\Converter;
-use iBrand\PhantomMagick\Exception\AdapterException;
+use Anam\PhantomMagick\Converter;
 
 class ConverterTest extends BaseTest
 {
@@ -33,7 +32,7 @@ class ConverterTest extends BaseTest
 	/** @test */
 	public function TestMake()
 	{
-		$this->assertInstanceOf('iBrand\PhantomMagick\Converter', Converter::make('http://code-chunk.com'), 'Check Converter::make() method returning the instance of \iBrand\PhantomMagick\Converter');
+		$this->assertInstanceOf('Anam\PhantomMagick\Converter', Converter::make('http://code-chunk.com'), 'Check Converter::make() method returning the instance of \Anam\PhantomMagick\Converter');
 	}
 
 	/** @test */
@@ -98,7 +97,7 @@ class ConverterTest extends BaseTest
 
 	/**
 	 * @test
-	 * @expectedException \iBrand\PhantomMagick\Exception\AdapterException
+	 * @expectedException \Anam\PhantomMagick\Exception\AdapterException
 	 */
 	public function TestWillThrowInvalidException()
 	{
