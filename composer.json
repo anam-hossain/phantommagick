@@ -32,8 +32,6 @@
 		"anam/phantomjs-linux-x86-binary": "^2.1",
 		"aws/aws-sdk-php": "^3.87",
 		"league/flysystem-aws-s3-v3": "^1.0",
-		"rackspace/php-opencloud": "^1.16",
-		"league/flysystem-rackspace": "^1.0",
 		"overtrue/flysystem-qiniu": "^1.0"
 	},
 	"require-dev": {
