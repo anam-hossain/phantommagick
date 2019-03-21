@@ -146,6 +146,7 @@ class Runner
 				return false;
 			}
 		} elseif (Str::contains($uname, 'linux')) {
+		    return true;
 			if (!shell_exec(escapeshellcmd("which {$binary}"))) {
 				return false;
 			}
