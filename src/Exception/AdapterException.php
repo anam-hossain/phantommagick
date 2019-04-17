@@ -4,7 +4,7 @@ namespace Anam\PhantomMagick\Exception;
 
 use Exception;
 
-class FileNotFoundException extends Exception
+class AdapterException extends Exception
 {
-
+	
 }
