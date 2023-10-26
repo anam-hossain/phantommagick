@@ -27,12 +27,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "league/flysystem": "~1.0"
+        "php": "^8.1",
+        "league/flysystem": "~1.0|~2.0|~3.0"
     },
     "require-dev": {
-        "mockery/mockery": "~0.9",
-        "phpunit/phpunit": "~4.4"
+        "mockery/mockery": "^1.4.2",
+        "phpunit/phpunit": "^9.3.3"
     },
     "autoload": {
         "psr-4": {
